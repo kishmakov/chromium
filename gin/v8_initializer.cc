@@ -543,7 +543,8 @@ void SetFlags(IsolateHolder::ScriptMode mode,
 // static
 void V8Initializer::Initialize(IsolateHolder::ScriptMode mode,
                                const std::string& js_command_line_flags,
-                               v8::OOMErrorCallback oom_error_callback) {
+                               v8::OOMErrorCallback oom_error_callback,
+                               bool create_v8_platform) {
   static bool v8_is_initialized = false;
   if (v8_is_initialized)
     return;
@@ -553,7 +554,8 @@ void V8Initializer::Initialize(IsolateHolder::ScriptMode mode,
   // See https://crbug.com/v8/11043
   SetFlags(mode, js_command_line_flags);
 
-  v8::V8::InitializePlatform(V8Platform::Get());
+  if (create_v8_platform)
+    v8::V8::InitializePlatform(V8Platform::Get());
 
   // Set this as early as possible in order to ensure OOM errors are reported
   // correctly.

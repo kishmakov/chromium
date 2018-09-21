@@ -117,7 +117,8 @@ class GIN_EXPORT IsolateHolder {
                          const intptr_t* reference_table = nullptr,
                          const std::string js_command_line_flags = {},
                          v8::FatalErrorCallback fatal_error_callback = nullptr,
-                         v8::OOMErrorCallback oom_error_callback = nullptr);
+                         v8::OOMErrorCallback oom_error_callback = nullptr,
+                         bool create_v8_platform = true);
 
   // Returns whether `Initialize` has already been invoked in the process.
   // Initialization is a one-way operation (i.e., this method cannot return
