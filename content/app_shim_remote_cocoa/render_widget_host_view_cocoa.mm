@@ -169,6 +169,15 @@ void ExtractUnderlines(NSAttributedString* string,
 
 }  // namespace
 
+@interface NSWindow (AtomCustomMethods)
+- (BOOL)acceptsFirstMouse;
+- (BOOL)disableAutoHideCursor;
+@end
+
+@interface NSView (ElectronCustomMethods)
+- (BOOL)shouldIgnoreMouseEvent;
+@end
+
 // RenderWidgetHostViewCocoa ---------------------------------------------------
 
 // Private methods:
@@ -767,6 +776,9 @@ void ExtractUnderlines(NSAttributedString* string,
 }
 
 - (BOOL)acceptsFirstMouse:(NSEvent*)theEvent {
+  if ([self.window respondsToSelector:@selector(acceptsFirstMouse)] &&
+      [self.window acceptsFirstMouse])
+    return YES;
   // Enable "click-through" if mouse clicks are accepted in inactive windows
   return [self acceptsMouseEventsOption] > kAcceptMouseEventsInActiveWindow;
 }
@@ -861,6 +873,10 @@ void ExtractUnderlines(NSAttributedString* string,
   // its parent view.
   BOOL hitSelf = NO;
   while (view) {
+    if ([view respondsToSelector:@selector(shouldIgnoreMouseEvent)] && ![view shouldIgnoreMouseEvent]) {
+      return NO;
+    }
+
     if (view == self)
       hitSelf = YES;
     if ([view isKindOfClass:[self class]] && ![view isEqual:self] &&
@@ -1182,6 +1198,10 @@ void ExtractUnderlines(NSAttributedString* string,
   bool shouldAutohideCursor = _textInputType != ui::TEXT_INPUT_TYPE_NONE &&
                               eventType == NSEventTypeKeyDown &&
                               !(modifierFlags & NSEventModifierFlagCommand);
+
+  if ([theEvent.window respondsToSelector:@selector(disableAutoHideCursor)] &&
+      [theEvent.window disableAutoHideCursor])
+    shouldAutohideCursor = NO;
 
   // We only handle key down events and just simply forward other events.
   if (eventType != NSEventTypeKeyDown) {
