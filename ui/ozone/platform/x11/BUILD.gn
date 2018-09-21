@@ -6,7 +6,7 @@ import("//build/config/chromeos/ui_mode.gni")
 import("//gpu/vulkan/features.gni")
 import("//ui/base/ui_features.gni")
 
-visibility = [ "//ui/ozone/*" ]
+visibility = [ "//ui/ozone/*", "//electron:*" ]
 
 assert(is_linux || is_chromeos)
 
