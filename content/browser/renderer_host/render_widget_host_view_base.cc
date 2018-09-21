@@ -634,6 +634,13 @@ void RenderWidgetHostViewBase::OnFrameTokenChangedForView(
     host()->DidProcessFrame(frame_token, activation_time);
 }
 
+RenderWidgetHostViewBase* RenderWidgetHostViewBase::CreateViewForWidget(
+    RenderWidgetHost* render_widget_host,
+    RenderWidgetHost* embedder_render_widget_host,
+    WebContentsView* web_contents_view) {
+  return web_contents_view->CreateViewForWidget(render_widget_host);
+}
+
 void RenderWidgetHostViewBase::ProcessMouseEvent(
     const blink::WebMouseEvent& event,
     const ui::LatencyInfo& latency) {
