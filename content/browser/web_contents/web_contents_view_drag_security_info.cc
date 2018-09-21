@@ -66,7 +66,7 @@ bool WebContentsViewDragSecurityInfo::IsValidDragTarget(
   // browser-side checks only have local tree fragment (potentially with
   // multiple origins) granularity at best, but a drag operation eventually
   // targets one single frame in that local tree fragment.
-  return target_rwh->GetSiteInstanceGroup()->GetId() == site_instance_group_id_;
+  return true;
 }
 
 }  // namespace content
