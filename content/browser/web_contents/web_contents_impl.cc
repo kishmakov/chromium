@@ -4895,6 +4895,12 @@ FrameTree* WebContentsImpl::CreateNewWindow(
   SetPartitionedPopinOpenerOnNewWindowIfNeeded(new_contents_impl, params,
                                                opener);
 
+  if (delegate_) {
+    delegate_->WebContentsCreatedWithFullParams(this, render_process_id,
+                                                opener->GetRoutingID(),
+                                                params, new_contents_impl);
+  }
+
   // If the new frame has a name, make sure any SiteInstances that can find
   // this named frame have proxies for it.  Must be called after
   // SetSessionStorageNamespace, since this calls CreateRenderView, which uses
@@ -4934,12 +4940,6 @@ FrameTree* WebContentsImpl::CreateNewWindow(
     pending_contents_[id] =
         CreatedWindow(std::move(new_contents), params.target_url);
     AddWebContentsDestructionObserver(new_contents_impl);
-  }
-
-  if (delegate_) {
-    delegate_->WebContentsCreated(this, render_process_id,
-                                  opener->GetRoutingID(), params.frame_name,
-                                  params.target_url, new_contents_impl);
   }
 
   observers_.NotifyObservers(&WebContentsObserver::DidOpenRequestedURL,

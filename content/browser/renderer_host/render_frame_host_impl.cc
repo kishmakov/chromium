@@ -9187,6 +9187,7 @@ void RenderFrameHostImpl::CreateNewWindow(
           last_committed_origin_, params->window_container_type,
           params->target_url, params->referrer.To<Referrer>(),
           params->frame_name, params->disposition, *params->features,
+          params->raw_features, params->body,
           effective_transient_activation_state, params->opener_suppressed,
           &no_javascript_access);
 

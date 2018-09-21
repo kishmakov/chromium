@@ -18,6 +18,7 @@
 #include "base/types/expected.h"
 #include "build/build_config.h"
 #include "content/common/content_export.h"
+#include "content/common/frame.mojom.h"
 #include "content/public/browser/back_forward_transition_animation_manager.h"
 #include "content/public/browser/eye_dropper.h"
 #include "content/public/browser/fullscreen_types.h"
@@ -367,6 +368,13 @@ class CONTENT_EXPORT WebContentsDelegate {
       const GURL& target_url,
       const StoragePartitionConfig& partition_config,
       SessionStorageNamespace* session_storage_namespace);
+
+  virtual void WebContentsCreatedWithFullParams(
+      WebContents* source_contents,
+      int opener_render_process_id,
+      int opener_render_frame_id,
+      const mojom::CreateNewWindowParams& params,
+      WebContents* new_contents);
 
   // Notifies the delegate about the creation of a new WebContents. This
   // typically happens when popups are created.

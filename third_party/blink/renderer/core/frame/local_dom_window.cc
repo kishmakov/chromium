@@ -2235,6 +2235,8 @@ DOMWindow* LocalDOMWindow::open(v8::Isolate* isolate,
   WebWindowFeatures window_features =
       GetWindowFeaturesFromString(features, entered_window);
 
+  window_features.raw_features = features;
+
   if (window_features.is_partitioned_popin) {
     UseCounter::Count(*entered_window,
                       WebFeature::kPartitionedPopin_OpenAttempt);
