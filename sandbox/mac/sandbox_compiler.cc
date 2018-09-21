@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "electron/mas.h"
 #include "sandbox/mac/seatbelt.h"
 
 namespace sandbox {
@@ -47,6 +48,7 @@ bool SandboxCompiler::SetParameter(const std::string& key,
 }
 
 bool SandboxCompiler::CompileAndApplyProfile(std::string& error) {
+#if !IS_MAS_BUILD()
   if (mode_ == Target::kSource) {
     std::vector<const char*> params;
 
@@ -67,6 +69,9 @@ bool SandboxCompiler::CompileAndApplyProfile(std::string& error) {
     }
   }
   return false;
+#else
+  return true;
+#endif
 }
 
 bool SandboxCompiler::CompilePolicyToProto(mac::SandboxPolicy& policy,

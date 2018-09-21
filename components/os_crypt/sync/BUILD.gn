@@ -48,6 +48,7 @@ component("os_crypt") {
       "os_crypt_mac.mm",
     ]
     deps += [ "//crypto:mock_apple_keychain" ]
+    deps += ["//electron/build/config:generate_mas_config"]
   }
 
   if (is_win) {

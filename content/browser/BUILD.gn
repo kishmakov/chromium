@@ -325,6 +325,7 @@ source_set("browser") {
     "//ui/strings:ax_strings",
     "//ui/touch_selection",
     "//v8:v8_version",
+    "//electron/build/config:generate_mas_config",
   ]
 
   public_deps = [

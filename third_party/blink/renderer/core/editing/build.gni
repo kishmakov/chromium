@@ -358,10 +358,14 @@ blink_core_sources_editing = [
 if (is_mac) {
   blink_core_sources_editing += [
     "commands/smart_replace_cf.cc",
-    "kill_ring_mac.mm",
     "substring_util.h",
     "substring_util.mm",
   ]
+  if (is_mas_build) {
+    blink_core_sources_editing += [ "kill_ring_mac.mm" ]
+  } else {
+    blink_core_sources_editing += [ "kill_ring_none.cc" ]
+  }
 } else {
   blink_core_sources_editing += [ "kill_ring_none.cc" ]
 }

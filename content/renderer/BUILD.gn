@@ -334,6 +334,7 @@ target(link_target_type, "renderer") {
     "//ui/surface",
     "//url",
     "//v8",
+    "//electron/build/config:generate_mas_config",
   ]
   allow_circular_includes_from = []
 

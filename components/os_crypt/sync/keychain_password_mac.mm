@@ -13,6 +13,7 @@
 #include "base/rand_util.h"
 #include "build/branding_buildflags.h"
 #include "crypto/apple_keychain.h"
+#include "electron/mas.h"
 
 using crypto::AppleKeychain;
 

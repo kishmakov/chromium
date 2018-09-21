@@ -26,6 +26,7 @@
 #import "components/remote_cocoa/app_shim/views_nswindow_delegate.h"
 #import "components/remote_cocoa/app_shim/window_touch_bar_delegate.h"
 #include "components/remote_cocoa/common/native_widget_ns_window_host.mojom.h"
+#include "electron/mas.h"
 #import "ui/base/cocoa/user_interface_item_command_handler.h"
 #import "ui/base/cocoa/window_size_constants.h"
 
@@ -111,14 +112,18 @@ void OrderChildWindow(NSWindow* child_window,
 
 }  // namespace
 
+#if !IS_MAS_BUILD()
 @interface NSNextStepFrame (Private)
 - (instancetype)initWithFrame:(NSRect)frame
                     styleMask:(NSUInteger)styleMask
                         owner:(id)owner;
 @end
+#endif
 
 @interface NSWindow (Private)
+#if !IS_MAS_BUILD()
 + (Class)frameViewClassForStyleMask:(NSWindowStyleMask)windowStyle;
+#endif
 - (BOOL)hasKeyAppearance;
 - (long long)_resizeDirectionForMouseLocation:(CGPoint)location;
 - (BOOL)_isConsideredOpenForPersistentState;
@@ -157,6 +162,8 @@ void OrderChildWindow(NSWindow* child_window,
 }
 @end
 
+#if !IS_MAS_BUILD()
+
 @implementation NativeWidgetMacNSWindowTitledFrame
 - (void)mouseDown:(NSEvent*)event {
   if (self.window.isMovable)
@@ -183,6 +190,8 @@ void OrderChildWindow(NSWindow* child_window,
   return NO;
 }
 @end
+
+#endif  // MAS_BUILD
 
 @implementation NativeWidgetMacNSWindow {
  @private
@@ -380,6 +389,8 @@ void OrderChildWindow(NSWindow* child_window,
 
 // NSWindow overrides.
 
+#if !IS_MAS_BUILD()
+
 + (Class)frameViewClassForStyleMask:(NSWindowStyleMask)windowStyle {
   if (windowStyle & NSWindowStyleMaskTitled) {
     if (Class customFrame = [NativeWidgetMacNSWindowTitledFrame class])
@@ -390,6 +401,8 @@ void OrderChildWindow(NSWindow* child_window,
   }
   return [super frameViewClassForStyleMask:windowStyle];
 }
+
+#endif
 
 - (BOOL)_isTitleHidden {
   bool shouldShowWindowTitle = YES;

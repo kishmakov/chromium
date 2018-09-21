@@ -16,6 +16,7 @@
 #include <string>
 
 #include "build/build_config.h"
+#include "electron/mas.h"
 #include "sandbox/mac/sandbox_crash_message.h"
 
 #if defined(ARCH_CPU_X86_64)
@@ -33,9 +34,11 @@
   }
 #endif
 
+#if !IS_MAS_BUILD()
 extern "C" {
 void abort_report_np(const char*, ...);
 }
+#endif
 
 namespace sandbox::logging {
 
@@ -76,9 +79,11 @@ void SendOsLog(Level level, const char* message) {
     sandbox::crash_message::SetCrashMessage(message);
   }
 
+#if !IS_MAS_BUILD()
   if (level == Level::FATAL) {
     abort_report_np(message);
   }
+#endif
 }
 
 // |error| is strerror(errno) when a P* logging function is called. Pass

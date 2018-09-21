@@ -35,6 +35,7 @@
 #include "content/public/browser/browser_accessibility_state.h"
 #import "content/public/browser/render_widget_host_view_mac_delegate.h"
 #include "content/public/common/content_features.h"
+#include "electron/mas.h"
 #include "skia/ext/skia_utils_mac.h"
 #include "third_party/blink/public/common/features.h"
 #include "third_party/blink/public/mojom/input/input_handler.mojom.h"
@@ -2059,15 +2060,21 @@ void ExtractUnderlines(NSAttributedString* string,
 // Since this implementation doesn't have to wait any IPC calls, this doesn't
 // make any key-typing jank. --hbono 7/23/09
 //
+#if !IS_MAS_BUILD()
 extern "C" {
 extern NSString* NSTextInputReplacementRangeAttributeName;
 }
+#endif
 
 - (NSArray*)validAttributesForMarkedText {
   // This code is just copied from WebKit except renaming variables.
   static NSArray* const kAttributes = @[
     NSUnderlineStyleAttributeName, NSUnderlineColorAttributeName,
+#if !IS_MAS_BUILD()
     NSMarkedClauseSegmentAttributeName, NSTextInputReplacementRangeAttributeName
+#else
+    NSMarkedClauseSegmentAttributeName
+#endif
   ];
   return kAttributes;
 }

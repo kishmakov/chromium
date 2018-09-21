@@ -198,6 +198,7 @@ source_set("audio") {
       "CoreMedia.framework",
     ]
     weak_frameworks = [ "ScreenCaptureKit.framework" ]  # macOS 13.0
+    deps += ["//electron/build/config:generate_mas_config"]
   }
 
   if (is_ios) {
