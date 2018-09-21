@@ -1306,7 +1306,7 @@ bool RenderThreadImpl::IsLcdTextEnabled() {
 }
 
 bool RenderThreadImpl::IsElasticOverscrollEnabled() {
-  return is_elastic_overscroll_enabled_;
+  return base::CommandLine::ForCurrentProcess()->HasSwitch("scroll-bounce");
 }
 
 gpu::GpuMemoryBufferManager* RenderThreadImpl::GetGpuMemoryBufferManager() {
