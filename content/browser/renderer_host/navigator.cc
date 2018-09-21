@@ -1450,6 +1450,7 @@ void Navigator::RecordNavigationMetrics(
             .InMilliseconds());
   }
 
+#if 0
   // If this is a same-process navigation and we have timestamps for unload
   // durations, fill those metrics out as well.
   if (params.unload_start && params.unload_end &&
@@ -1499,6 +1500,7 @@ void Navigator::RecordNavigationMetrics(
          first_before_unload_start_time)
             .InMilliseconds());
   }
+#endif
 
   builder.Record(ukm::UkmRecorder::Get());
   metrics_data_.reset();
