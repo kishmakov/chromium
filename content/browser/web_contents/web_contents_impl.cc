@@ -4017,21 +4017,25 @@ KeyboardEventProcessingResult WebContentsImpl::PreHandleKeyboardEvent(
     const input::NativeWebKeyboardEvent& event) {
   OPTIONAL_TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("content.verbose"),
                         "WebContentsImpl::PreHandleKeyboardEvent");
-  auto* outermost_contents = GetOutermostWebContents();
-  // TODO(wjmaclean): Generalize this to forward all key events to the outermost
-  // delegate's handler.
-  if (outermost_contents != this && IsFullscreen() &&
-      event.windows_key_code == ui::VKEY_ESCAPE) {
-    // When an inner WebContents has focus and is fullscreen, redirect <esc>
-    // key events to the outermost WebContents so it can be handled by that
-    // WebContents' delegate.
-    if (outermost_contents->PreHandleKeyboardEvent(event) ==
-        KeyboardEventProcessingResult::HANDLED) {
+
+  auto handled = delegate_ ? delegate_->PreHandleKeyboardEvent(this, event)
+                   : KeyboardEventProcessingResult::NOT_HANDLED;
+
+  if (IsFullscreen() && event.windows_key_code == ui::VKEY_ESCAPE) {
+    if (handled == KeyboardEventProcessingResult::HANDLED)
       return KeyboardEventProcessingResult::HANDLED;
+
+    // When an inner WebContents has focus and is fullscreen, traverse through
+    // containing webcontents to any that may handle the escape key.
+    while (auto* outer_web_contents = GetOuterWebContents()) {
+      auto result = outer_web_contents->PreHandleKeyboardEvent(event);
+      if (result == KeyboardEventProcessingResult::HANDLED) {
+        return KeyboardEventProcessingResult::HANDLED;
+      }
     }
   }
-  return delegate_ ? delegate_->PreHandleKeyboardEvent(this, event)
-                   : KeyboardEventProcessingResult::NOT_HANDLED;
+
+  return handled;
 }
 
 bool WebContentsImpl::HandleMouseEvent(const blink::WebMouseEvent& event) {
@@ -4190,7 +4194,7 @@ void WebContentsImpl::EnterFullscreenMode(
   OPTIONAL_TRACE_EVENT0("content", "WebContentsImpl::EnterFullscreenMode");
   DCHECK(CanEnterFullscreenMode(requesting_frame));
   DCHECK(requesting_frame->IsActive());
-  DCHECK(ContainsOrIsFocusedWebContents());
+  DCHECK(ContainsOrIsFocusedWebContents() || IsGuest());
   if (base::FeatureList::IsEnabled(
           features::kAutomaticFullscreenContentSetting)) {
     // Ensure the window is made active to take input focus. The user may have
