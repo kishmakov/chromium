@@ -16,6 +16,7 @@
 #include <utility>
 
 #include "base/component_export.h"
+#include "third_party/abseil-cpp/absl/types/optional.h"
 #include "base/time/time.h"
 #include "build/build_config.h"
 #include "ui/events/event_constants.h"
@@ -131,6 +132,8 @@ class COMPONENT_EXPORT(UI_BASE) Accelerator {
   bool interrupted_by_mouse_event() const {
     return interrupted_by_mouse_event_;
   }
+
+  absl::optional<char16_t> shifted_char;
 
  private:
   friend class AcceleratorTestMac;
