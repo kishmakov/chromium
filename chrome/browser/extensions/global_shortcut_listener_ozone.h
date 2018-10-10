@@ -46,7 +46,8 @@ class GlobalShortcutListenerOzone
   void OnKeyPressed(ui::KeyboardCode key_code,
                     bool is_alt_down,
                     bool is_ctrl_down,
-                    bool is_shift_down) override;
+                    bool is_shift_down,
+                    bool is_cmd_down) override;
   void OnPlatformListenerDestroyed() override;
 
   bool is_listening_ = false;
