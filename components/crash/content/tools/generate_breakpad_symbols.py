@@ -204,7 +204,7 @@ def GetSharedLibraryDependenciesMac(binary, exe_path):
                'rpaths %s' %
                (m.group(1), exe_path, loader_path, ', '.join(rpaths))),
               file=sys.stderr)
-        sys.exit(1)
+        # sys.exit(1)
   return deps
 
 
