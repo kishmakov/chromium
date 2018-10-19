@@ -107,7 +107,8 @@ class DesktopMediaList {
   // once per DesktopMediaList instance.  It should not be called after
   // StartUpdating(), and StartUpdating() should not be called until |callback|
   // has been called.
-  virtual void Update(UpdateCallback callback) = 0;
+  virtual void Update(UpdateCallback callback,
+                      bool refresh_thumbnails = false) = 0;
 
   virtual int GetSourceCount() const = 0;
   virtual const Source& GetSource(int index) const = 0;

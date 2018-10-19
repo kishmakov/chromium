@@ -40,7 +40,8 @@ class FakeDesktopMediaList : public DesktopMediaList {
   void SetThumbnailSize(const gfx::Size& thumbnail_size) override;
   void SetViewDialogWindowId(content::DesktopMediaID dialog_id) override;
   void StartUpdating(DesktopMediaListObserver* observer) override;
-  void Update(UpdateCallback callback) override;
+  void Update(UpdateCallback callback,
+              bool refresh_thumbnails = false) override;
   int GetSourceCount() const override;
   const Source& GetSource(int index) const override;
   DesktopMediaList::Type GetMediaListType() const override;

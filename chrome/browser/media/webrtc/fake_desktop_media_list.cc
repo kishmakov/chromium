@@ -79,7 +79,8 @@ void FakeDesktopMediaList::StartUpdating(DesktopMediaListObserver* observer) {
   thumbnail_ = gfx::ImageSkia::CreateFrom1xBitmap(bitmap);
 }
 
-void FakeDesktopMediaList::Update(UpdateCallback callback) {
+void FakeDesktopMediaList::Update(UpdateCallback callback,
+                                  bool refresh_thumbnails) {
   std::move(callback).Run();
 }
 

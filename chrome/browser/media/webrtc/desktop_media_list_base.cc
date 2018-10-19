@@ -74,12 +74,12 @@ void DesktopMediaListBase::StartUpdating(DesktopMediaListObserver* observer) {
   Refresh(true);
 }
 
-void DesktopMediaListBase::Update(UpdateCallback callback) {
+void DesktopMediaListBase::Update(UpdateCallback callback, bool refresh_thumbnails) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   DCHECK(sources_.empty());
   DCHECK(!refresh_callback_);
   refresh_callback_ = std::move(callback);
-  Refresh(false);
+  Refresh(refresh_thumbnails);
 }
 
 int DesktopMediaListBase::GetSourceCount() const {
