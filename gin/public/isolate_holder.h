@@ -87,7 +87,8 @@ class GIN_EXPORT IsolateHolder {
       scoped_refptr<base::SingleThreadTaskRunner> user_visible_task_runner =
           nullptr,
       scoped_refptr<base::SingleThreadTaskRunner> best_effort_task_runner =
-          nullptr);
+          nullptr,
+      v8::Isolate* isolate = nullptr);
   IsolateHolder(
       scoped_refptr<base::SingleThreadTaskRunner> task_runner,
       AccessMode access_mode,
@@ -97,7 +98,8 @@ class GIN_EXPORT IsolateHolder {
       scoped_refptr<base::SingleThreadTaskRunner> user_visible_task_runner =
           nullptr,
       scoped_refptr<base::SingleThreadTaskRunner> best_effort_task_runner =
-          nullptr);
+          nullptr,
+      v8::Isolate* isolate = nullptr);
   IsolateHolder(const IsolateHolder&) = delete;
   IsolateHolder& operator=(const IsolateHolder&) = delete;
   ~IsolateHolder();

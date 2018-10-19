@@ -76,7 +76,8 @@ IsolateHolder::IsolateHolder(
     v8::CreateHistogramCallback create_histogram_callback,
     v8::AddHistogramSampleCallback add_histogram_sample_callback,
     scoped_refptr<base::SingleThreadTaskRunner> user_visible_task_runner,
-    scoped_refptr<base::SingleThreadTaskRunner> best_effort_task_runner)
+    scoped_refptr<base::SingleThreadTaskRunner> best_effort_task_runner,
+    v8::Isolate* isolate)
     : IsolateHolder(std::move(task_runner),
                     access_mode,
                     isolate_type,
@@ -86,7 +87,8 @@ IsolateHolder::IsolateHolder(
                                              add_histogram_sample_callback),
                     isolate_creation_mode,
                     std::move(user_visible_task_runner),
-                    std::move(best_effort_task_runner)) {}
+                    std::move(best_effort_task_runner),
+                    isolate) {}
 
 IsolateHolder::IsolateHolder(
     scoped_refptr<base::SingleThreadTaskRunner> task_runner,
@@ -95,7 +97,8 @@ IsolateHolder::IsolateHolder(
     std::unique_ptr<v8::Isolate::CreateParams> params,
     IsolateCreationMode isolate_creation_mode,
     scoped_refptr<base::SingleThreadTaskRunner> user_visible_task_runner,
-    scoped_refptr<base::SingleThreadTaskRunner> best_effort_task_runner)
+    scoped_refptr<base::SingleThreadTaskRunner> best_effort_task_runner,
+    v8::Isolate* isolate)
     : access_mode_(access_mode), isolate_type_(isolate_type) {
   CHECK(Initialized())
       << "You need to invoke gin::IsolateHolder::Initialize first";
@@ -106,7 +109,7 @@ IsolateHolder::IsolateHolder(
   v8::ArrayBuffer::Allocator* allocator = params->array_buffer_allocator;
   DCHECK(allocator);
 
-  isolate_ = v8::Isolate::Allocate();
+  isolate_ = isolate ? isolate : v8::Isolate::Allocate();
   isolate_data_ = std::make_unique<PerIsolateData>(
       isolate_, allocator, access_mode_, task_runner,
       std::move(user_visible_task_runner), std::move(best_effort_task_runner));
