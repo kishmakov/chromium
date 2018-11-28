@@ -35,6 +35,9 @@ namespace content {
 
 #if BUILDFLAG(USE_ZYGOTE)
 ZygoteCommunication* RendererSandboxedProcessLauncherDelegate::GetZygote() {
+  if (!use_zygote_) {
+    return nullptr;
+  }
   const base::CommandLine& browser_command_line =
       *base::CommandLine::ForCurrentProcess();
   base::CommandLine::StringType renderer_prefix =
@@ -70,6 +73,9 @@ RendererSandboxedProcessLauncherDelegateWin::
       is_pdf_renderer_(is_pdf_renderer) {
   // PDF renderers must be jitless.
   CHECK(!is_pdf_renderer || is_jit_disabled);
+#if BUILDFLAG(USE_ZYGOTE)
+  use_zygote_ = !cmd_line->HasSwitch(switches::kNoZygote);
+#endif
   if (is_jit_disabled) {
     dynamic_code_can_be_disabled_ = true;
     return;
