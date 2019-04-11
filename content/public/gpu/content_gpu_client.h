@@ -31,6 +31,10 @@ class CONTENT_EXPORT ContentGpuClient {
  public:
   virtual ~ContentGpuClient() {}
 
+  // Allows the embedder to perform platform-specific initialization before
+  // creating the message loop.
+  virtual void PreCreateMessageLoop() {}
+
   // Called during initialization once the GpuService has been initialized.
   virtual void GpuServiceInitialized() {}
 
