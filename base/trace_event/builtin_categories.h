@@ -88,6 +88,7 @@
   X("drm")                                                               \
   X("drmcursor")                                                         \
   X("dwrite")                                                            \
+  X("electron")                                                          \
   X("evdev")                                                             \
   X("event")                                                             \
   X("exo")                                                               \
