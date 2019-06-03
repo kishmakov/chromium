@@ -4617,6 +4617,9 @@ RenderFrameHostManager::GetSiteInstanceForNavigationRequest(
     request->ResetStateForSiteInstanceChange();
   }
 
+  GetContentClient()->browser()->RegisterPendingSiteInstance(
+      render_frame_host_.get(), dest_site_instance.get());
+
   return dest_site_instance;
 }
 
