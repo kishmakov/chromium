@@ -36,6 +36,10 @@
 #include "sandbox/policy/mac/utility.sb.h"
 #include "sandbox/policy/mojom/sandbox.mojom.h"
 
+#if BUILDFLAG(ENABLE_PRINTING)
+#include "sandbox/policy/mac/print_backend.sb.h"
+#endif
+
 namespace sandbox::policy {
 
 base::FilePath GetCanonicalPath(const base::FilePath& path) {

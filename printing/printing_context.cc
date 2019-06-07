@@ -154,7 +154,6 @@ void PrintingContext::UsePdfSettings() {
 
 mojom::ResultCode PrintingContext::UpdatePrintSettings(
     base::Value::Dict job_settings) {
-  ResetSettings();
   {
     std::unique_ptr<PrintSettings> settings =
         PrintSettingsFromJobSettings(job_settings);
