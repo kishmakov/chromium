@@ -559,7 +559,11 @@ void RenderWidgetHostViewMac::WasOccluded() {
     return;
 
   host()->WasHidden();
-  browser_compositor_->SetRenderWidgetHostIsHidden(true);
+  // Consider the RWHV occluded only if it is not attached to a window
+  // (e.g. unattached BrowserView). Otherwise we treat it as visible to
+  // prevent unnecessary compositor recycling.
+  const bool unattached = ![GetInProcessNSView() window];
+  browser_compositor_->SetRenderWidgetHostIsHidden(unattached);
 }
 
 void RenderWidgetHostViewMac::SetSize(const gfx::Size& size) {
