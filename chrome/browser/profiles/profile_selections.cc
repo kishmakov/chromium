@@ -132,6 +132,7 @@ ProfileSelection ProfileSelections::GetProfileSelection(
   }
 #endif  // BUILDFLAG(IS_CHROMEOS)
 
+#if 0
   // Treat other off the record profiles as Incognito (primary otr) Profiles.
   if (profile->IsRegularProfile() || profile->IsIncognitoProfile() ||
       profile_metrics::GetBrowserProfileType(profile) ==
@@ -148,6 +149,8 @@ ProfileSelection ProfileSelections::GetProfileSelection(
   }
 
   NOTREACHED();
+#endif
+  return ProfileSelection::kNone;
 }
 
 void ProfileSelections::SetProfileSelectionForRegular(

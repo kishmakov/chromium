@@ -22,6 +22,9 @@ ProfileKeyedServiceFactory::~ProfileKeyedServiceFactory() = default;
 
 content::BrowserContext* ProfileKeyedServiceFactory::GetBrowserContextToUse(
     content::BrowserContext* context) const {
+  return context;
+#if 0
   Profile* profile = Profile::FromBrowserContext(context);
   return profile_selections_.ApplyProfileSelection(profile);
+#endif
 }
