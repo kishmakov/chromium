@@ -6,7 +6,9 @@
 
 namespace storage {
 
-const size_t kPerStorageAreaQuota = 10 * 1024 * 1024;
+// Electron's dom_storage_limits.patch increased this value from 10MiB to 100MiB
+const size_t kPerStorageAreaQuota = 100 * 1024 * 1024;
+
 const size_t kPerStorageAreaOverQuotaAllowance = 100 * 1024;
 
 }  // namespace storage
