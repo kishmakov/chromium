@@ -4792,6 +4792,12 @@ void RenderFrameImpl::DidCreateScriptContext(v8::Local<v8::Context> context,
     observer.DidCreateScriptContext(context, world_id);
 }
 
+void RenderFrameImpl::DidInstallConditionalFeatures(
+    v8::Local<v8::Context> context, int world_id) {
+  for (auto& observer : observers_)
+    observer.DidInstallConditionalFeatures(context, world_id);
+}
+
 void RenderFrameImpl::WillReleaseScriptContext(v8::Local<v8::Context> context,
                                                int world_id) {
   for (auto& observer : observers_)

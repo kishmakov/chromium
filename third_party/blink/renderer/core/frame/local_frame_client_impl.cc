@@ -294,6 +294,13 @@ void LocalFrameClientImpl::DidCreateScriptContext(
     web_frame_->Client()->DidCreateScriptContext(context, world_id);
 }
 
+void LocalFrameClientImpl::DidInstallConditionalFeatures(
+    v8::Local<v8::Context> context,
+    int32_t world_id) {
+  if (web_frame_->Client())
+    web_frame_->Client()->DidInstallConditionalFeatures(context, world_id);
+}
+
 void LocalFrameClientImpl::WillReleaseScriptContext(
     v8::Local<v8::Context> context,
     int32_t world_id) {
