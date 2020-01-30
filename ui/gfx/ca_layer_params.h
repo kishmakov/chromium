@@ -7,6 +7,7 @@
 
 #include "base/component_export.h"
 #include "build/build_config.h"
+#include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/size.h"
 
 #if BUILDFLAG(IS_APPLE)
@@ -50,6 +51,8 @@ struct COMPONENT_EXPORT(GFX) CALayerParams {
 #if BUILDFLAG(IS_APPLE)
   gfx::ScopedRefCountedIOSurfaceMachPort io_surface_mach_port;
 #endif
+
+  gfx::Rect damage;
 
   // The geometry of the frame.
   gfx::Size pixel_size;
