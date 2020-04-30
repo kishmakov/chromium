@@ -86,6 +86,8 @@ std::map<std::string, std::string> GetProcessSimpleAnnotations() {
     }  // @autoreleasepool
     return process_annotations;
   }();
+  CrashReporterClient* crash_reporter_client = GetCrashReporterClient();
+  crash_reporter_client->GetProcessSimpleAnnotations(&annotations);
   return annotations;
 }
 
@@ -155,6 +157,13 @@ bool PlatformCrashpadInitialization(
       std::string url = crash_reporter_client->GetUploadUrl();
 
       std::vector<std::string> arguments;
+
+      if (!crash_reporter_client->GetShouldRateLimit()) {
+        arguments.push_back("--no-rate-limit");
+      }
+      if (!crash_reporter_client->GetShouldCompressUploads()) {
+        arguments.push_back("--no-upload-gzip");
+      }
 
       if (crash_reporter_client->ShouldMonitorCrashHandlerExpensively()) {
         arguments.push_back("--monitor-self");

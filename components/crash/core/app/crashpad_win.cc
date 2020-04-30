@@ -92,6 +92,7 @@ bool PlatformCrashpadInitialization(
 
     std::map<std::string, std::string> process_annotations;
     GetPlatformCrashpadAnnotations(&process_annotations);
+    crash_reporter_client->GetProcessSimpleAnnotations(&process_annotations);
 
     std::string url = crash_reporter_client->GetUploadUrl();
 
@@ -128,6 +129,13 @@ bool PlatformCrashpadInitialization(
     }
 
     std::vector<std::string> arguments(start_arguments);
+
+    if (!crash_reporter_client->GetShouldRateLimit()) {
+      arguments.push_back("--no-rate-limit");
+    }
+    if (!crash_reporter_client->GetShouldCompressUploads()) {
+      arguments.push_back("--no-upload-gzip");
+    }
 
     if (crash_reporter_client->ShouldMonitorCrashHandlerExpensively()) {
       arguments.push_back("--monitor-self");

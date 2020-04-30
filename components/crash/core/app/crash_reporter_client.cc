@@ -122,6 +122,17 @@ bool CrashReporterClient::ReportingIsEnforcedByPolicy(bool* breakpad_enabled) {
   return false;
 }
 
+bool CrashReporterClient::GetShouldRateLimit() {
+  return true;
+}
+
+bool CrashReporterClient::GetShouldCompressUploads() {
+  return true;
+}
+
+void CrashReporterClient::GetProcessSimpleAnnotations(std::map<std::string, std::string>* annotations) {
+}
+
 #if BUILDFLAG(IS_ANDROID)
 unsigned int CrashReporterClient::GetCrashDumpPercentage() {
   return 100;

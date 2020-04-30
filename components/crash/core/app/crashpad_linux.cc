@@ -231,6 +231,7 @@ bool PlatformCrashpadInitialization(
     // where crash_reporter provides it's own values for lsb-release.
     annotations["lsb-release"] = base::GetLinuxDistro();
 #endif
+    crash_reporter_client->GetProcessSimpleAnnotations(&annotations);
 
     std::vector<std::string> arguments;
     if (crash_reporter_client->ShouldMonitorCrashHandlerExpensively()) {
@@ -251,6 +252,13 @@ bool PlatformCrashpadInitialization(
       arguments.push_back("--always-allow-feedback");
     }
 #endif
+
+    if (!crash_reporter_client->GetShouldRateLimit()) {
+      arguments.push_back("--no-rate-limit");
+    }
+    if (!crash_reporter_client->GetShouldCompressUploads()) {
+      arguments.push_back("--no-upload-gzip");
+    }
 
     CHECK(client.StartHandler(handler_path, *database_path, metrics_path, url,
                               annotations, arguments, false, false));
