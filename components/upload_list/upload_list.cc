@@ -65,6 +65,10 @@ void UploadList::Load(base::OnceClosure callback) {
       base::BindOnce(&UploadList::OnLoadComplete, this));
 }
 
+void UploadList::LoadSync() {
+  uploads_ = LoadUploadList();
+}
+
 void UploadList::Clear(const base::Time& begin,
                        const base::Time& end,
                        base::OnceClosure callback) {

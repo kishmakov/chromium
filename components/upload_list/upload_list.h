@@ -82,6 +82,8 @@ class UploadList : public base::RefCountedThreadSafe<UploadList> {
   // overwrite the previously supplied one, and the first will not be called.
   void Load(base::OnceClosure callback);
 
+  void LoadSync();
+
   // Clears any data associated with the upload list, where the upload time or
   // capture time falls within the given range.
   void Clear(const base::Time& begin,
