@@ -448,6 +448,7 @@ class CORE_EXPORT WebViewImpl final : public WebView,
   LocalDOMWindow* PagePopupWindow() const;
 
   PageScheduler* Scheduler() const override;
+  void SetSchedulerThrottling(bool allowed) override;
   void SetVisibilityState(mojom::blink::PageVisibilityState visibility_state,
                           bool is_initial_state) override;
   mojom::blink::PageVisibilityState GetVisibilityState() override;
@@ -935,6 +936,8 @@ class CORE_EXPORT WebViewImpl final : public WebView,
 
   // If true, we send IPC messages when |preferred_size_| changes.
   bool send_preferred_size_changes_ = false;
+
+  bool scheduler_throttling_allowed_ = true;
 
   // Whether the preferred size may have changed and |UpdatePreferredSize| needs
   // to be called.

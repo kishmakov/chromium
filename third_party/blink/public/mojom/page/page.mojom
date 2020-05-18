@@ -173,4 +173,7 @@ interface PageBroadcast {
   // 2. The ColorProvider associated with the WebContents changes as a result
   // of theme changes.
   UpdateColorProviders(ColorProviderColorMaps color_provider_colors);
+
+  // Whether to enable the Renderer scheduler background throttling.
+  SetSchedulerThrottling(bool allowed);
 };

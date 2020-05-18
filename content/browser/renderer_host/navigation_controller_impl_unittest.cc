@@ -163,6 +163,12 @@ class MockPageBroadcast : public blink::mojom::PageBroadcast {
               (network::mojom::AttributionSupport support),
               (override));
 
+  MOCK_METHOD(
+      void,
+      SetSchedulerThrottling,
+      (bool allowed),
+      (override));
+
   mojo::PendingAssociatedRemote<blink::mojom::PageBroadcast> GetRemote() {
     return receiver_.BindNewEndpointAndPassDedicatedRemote();
   }

@@ -2456,6 +2456,10 @@ void WebViewImpl::SetPageLifecycleStateInternal(
   TRACE_EVENT2("navigation", "WebViewImpl::SetPageLifecycleStateInternal",
                "old_state", old_state, "new_state", new_state);
 
+  // If backgroundThrottling is disabled, the page is always visible.
+  if (!scheduler_throttling_allowed_)
+      new_state->visibility = mojom::blink::PageVisibilityState::kVisible;
+
   bool storing_in_bfcache = new_state->is_in_back_forward_cache &&
                             !old_state->is_in_back_forward_cache;
   bool restoring_from_bfcache = !new_state->is_in_back_forward_cache &&
@@ -3988,10 +3992,23 @@ PageScheduler* WebViewImpl::Scheduler() const {
   return GetPage()->GetPageScheduler();
 }
 
+void WebViewImpl::SetSchedulerThrottling(bool allowed) {
+  DCHECK(GetPage());
+  scheduler_throttling_allowed_ = allowed;
+  GetPage()->GetPageScheduler()->SetPageVisible(!allowed || GetVisibilityState() == mojom::blink::PageVisibilityState::kVisible);
+}
+
 void WebViewImpl::SetVisibilityState(
     mojom::blink::PageVisibilityState visibility_state,
     bool is_initial_state) {
   DCHECK(GetPage());
+
+  if (!scheduler_throttling_allowed_) {
+    GetPage()->SetVisibilityState(mojom::blink::PageVisibilityState::kVisible, is_initial_state);
+    GetPage()->GetPageScheduler()->SetPageVisible(true);
+    return;
+  }
+
   GetPage()->SetVisibilityState(visibility_state, is_initial_state);
   // Do not throttle if the page should be painting.
   bool is_visible =

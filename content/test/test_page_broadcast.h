@@ -50,6 +50,7 @@ class TestPageBroadcast : public blink::mojom::PageBroadcast {
       network::mojom::AttributionSupport support) override;
   void UpdateColorProviders(
       const blink::ColorProviderColorMaps& color_provider_colors) override;
+  void SetSchedulerThrottling(bool allowed) override {}
 
   mojo::AssociatedReceiver<blink::mojom::PageBroadcast> receiver_;
 };
