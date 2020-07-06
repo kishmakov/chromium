@@ -30,6 +30,8 @@ class ScopedAccessibilityMode;
 class WebContents;
 }  // namespace content
 
+class ElectronAccessibilityUIMessageHandler;
+
 namespace user_prefs {
 class PrefRegistrySyncable;
 }  // namespace user_prefs
@@ -80,6 +82,8 @@ class AccessibilityUIMessageHandler : public content::WebUIMessageHandler {
   static void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry);
 
  private:
+  friend class ElectronAccessibilityUIMessageHandler;
+
   // Applies `mode` to `web_contents` for the lifetime of the accessibility
   // UI page.
   void SetAccessibilityModeForWebContents(content::WebContents* web_contents,
