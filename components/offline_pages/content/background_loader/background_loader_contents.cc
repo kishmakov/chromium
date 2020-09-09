@@ -89,8 +89,7 @@ bool BackgroundLoaderContents::IsWebContentsCreationOverridden(
     content::SiteInstance* source_site_instance,
     content::mojom::WindowContainerType window_container_type,
     const GURL& opener_url,
-    const std::string& frame_name,
-    const GURL& target_url) {
+    const content::mojom::CreateNewWindowParams& params) {
   // Background pages should not create other webcontents/tabs.
   return true;
 }

@@ -82,8 +82,7 @@ class WebContentsDelegateAndroid : public content::WebContentsDelegate {
       content::SiteInstance* source_site_instance,
       content::mojom::WindowContainerType window_container_type,
       const GURL& opener_url,
-      const std::string& frame_name,
-      const GURL& target_url) override;
+      const content::mojom::CreateNewWindowParams& params) override;
   void CloseContents(content::WebContents* source) override;
   void SetContentsBounds(content::WebContents* source,
                          const gfx::Rect& bounds) override;

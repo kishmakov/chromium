@@ -79,8 +79,7 @@ class ChromeKeyboardContentsDelegate : public content::WebContentsDelegate,
       content::SiteInstance* source_site_instance,
       content::mojom::WindowContainerType window_container_type,
       const GURL& opener_url,
-      const std::string& frame_name,
-      const GURL& target_url) override {
+      const content::mojom::CreateNewWindowParams& params) override {
     return true;
   }
 

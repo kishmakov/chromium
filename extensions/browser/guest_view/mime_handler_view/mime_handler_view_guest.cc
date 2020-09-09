@@ -425,8 +425,7 @@ bool MimeHandlerViewGuest::IsWebContentsCreationOverridden(
     content::SiteInstance* source_site_instance,
     content::mojom::WindowContainerType window_container_type,
     const GURL& opener_url,
-    const std::string& frame_name,
-    const GURL& target_url) {
+    const content::mojom::CreateNewWindowParams& params) {
   CHECK(!base::FeatureList::IsEnabled(features::kGuestViewMPArch));
 
   return true;

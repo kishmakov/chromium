@@ -152,8 +152,7 @@ bool WebContentsDelegate::IsWebContentsCreationOverridden(
     SiteInstance* source_site_instance,
     mojom::WindowContainerType window_container_type,
     const GURL& opener_url,
-    const std::string& frame_name,
-    const GURL& target_url) {
+    const mojom::CreateNewWindowParams& params) {
   return false;
 }
 

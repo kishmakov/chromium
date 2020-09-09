@@ -574,8 +574,7 @@ bool FrameImpl::IsWebContentsCreationOverridden(
     content::SiteInstance* source_site_instance,
     content::mojom::WindowContainerType window_container_type,
     const GURL& opener_url,
-    const std::string& frame_name,
-    const GURL& target_url) {
+    const content::mojom::CreateNewWindowParams& params) {
   // Specify a generous upper bound for unacknowledged popup windows, so that we
   // can catch bad client behavior while not interfering with normal operation.
   constexpr size_t kMaxPendingWebContentsCount = 10;

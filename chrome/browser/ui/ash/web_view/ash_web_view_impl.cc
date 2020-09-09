@@ -118,10 +118,9 @@ bool AshWebViewImpl::IsWebContentsCreationOverridden(
     content::SiteInstance* source_site_instance,
     content::mojom::WindowContainerType window_container_type,
     const GURL& opener_url,
-    const std::string& frame_name,
-    const GURL& target_url) {
+    const content::mojom::CreateNewWindowParams& params) {
   if (params_.suppress_navigation) {
-    NotifyDidSuppressNavigation(target_url,
+    NotifyDidSuppressNavigation(params.target_url,
                                 WindowOpenDisposition::NEW_FOREGROUND_TAB,
                                 /*from_user_gesture=*/true);
     return true;

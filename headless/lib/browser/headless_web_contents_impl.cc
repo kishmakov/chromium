@@ -205,8 +205,7 @@ class HeadlessWebContentsImpl::Delegate : public content::WebContentsDelegate {
       content::SiteInstance* source_site_instance,
       content::mojom::WindowContainerType window_container_type,
       const GURL& opener_url,
-      const std::string& frame_name,
-      const GURL& target_url) override {
+      const content::mojom::CreateNewWindowParams& params) override {
     return headless_web_contents_->browser_context()
         ->options()
         ->block_new_web_contents();

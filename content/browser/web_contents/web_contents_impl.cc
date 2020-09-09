@@ -4790,8 +4790,7 @@ FrameTree* WebContentsImpl::CreateNewWindow(
 
   if (delegate_ && delegate_->IsWebContentsCreationOverridden(
                        source_site_instance, params.window_container_type,
-                       opener->GetLastCommittedURL(), params.frame_name,
-                       params.target_url)) {
+                       opener->GetLastCommittedURL(), params)) {
     auto* web_contents_impl =
         static_cast<WebContentsImpl*>(delegate_->CreateCustomWebContents(
             opener, source_site_instance, is_new_browsing_instance,

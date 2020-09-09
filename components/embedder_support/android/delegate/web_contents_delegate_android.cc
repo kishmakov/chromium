@@ -185,14 +185,13 @@ bool WebContentsDelegateAndroid::IsWebContentsCreationOverridden(
     content::SiteInstance* source_site_instance,
     content::mojom::WindowContainerType window_container_type,
     const GURL& opener_url,
-    const std::string& frame_name,
-    const GURL& target_url) {
+    const content::mojom::CreateNewWindowParams& params) {
   JNIEnv* env = AttachCurrentThread();
   ScopedJavaLocalRef<jobject> obj = GetJavaDelegate(env);
   if (obj.is_null())
     return false;
   ScopedJavaLocalRef<jobject> java_gurl =
-      url::GURLAndroid::FromNativeGURL(env, target_url);
+      url::GURLAndroid::FromNativeGURL(env, params.target_url.spec());
   return !Java_WebContentsDelegateAndroid_shouldCreateWebContents(env, obj,
                                                                   java_gurl);
 }

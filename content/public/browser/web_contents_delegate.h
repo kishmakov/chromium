@@ -347,8 +347,7 @@ class CONTENT_EXPORT WebContentsDelegate {
       SiteInstance* source_site_instance,
       mojom::WindowContainerType window_container_type,
       const GURL& opener_url,
-      const std::string& frame_name,
-      const GURL& target_url);
+      const mojom::CreateNewWindowParams& params);
 
   // Allow delegate to creates a custom WebContents when
   // WebContents::CreateNewWindow() is called. This function is only called
