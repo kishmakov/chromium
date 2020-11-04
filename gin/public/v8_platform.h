@@ -32,6 +32,7 @@ class GIN_EXPORT V8Platform : public v8::Platform {
   // enabling Arm's Branch Target Instructions for executable pages. This is
   // verified in the tests for gin::PageAllocator.
   PageAllocator* GetPageAllocator() override;
+  static PageAllocator* GetCurrentPageAllocator();
 #if PA_BUILDFLAG(ENABLE_THREAD_ISOLATION)
   ThreadIsolatedAllocator* GetThreadIsolatedAllocator() override;
 #endif

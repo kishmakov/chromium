@@ -204,6 +204,10 @@ ThreadIsolatedAllocator* V8Platform::GetThreadIsolatedAllocator() {
 }
 #endif  // PA_BUILDFLAG(ENABLE_THREAD_ISOLATION)
 
+PageAllocator* V8Platform::GetCurrentPageAllocator() {
+  return g_page_allocator.Pointer();
+}
+
 void V8Platform::OnCriticalMemoryPressure() {
 // We only have a reservation on 32-bit Windows systems.
 // TODO(bbudge) Make the #if's in BlinkInitializer match.
