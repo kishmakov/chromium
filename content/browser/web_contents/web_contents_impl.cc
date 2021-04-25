@@ -3760,6 +3760,13 @@ void WebContentsImpl::Init(const WebContents::CreateParams& params,
       params.main_frame_name, GetOpener(), primary_main_frame_policy,
       base::UnguessableToken::Create());
 
+  if (params.view && params.delegate_view) {
+    view_.reset(params.view);
+    render_view_host_delegate_view_ = params.delegate_view;
+  }
+
+  if (!view_) {
+
   std::unique_ptr<WebContentsViewDelegate> delegate =
       GetContentClient()->browser()->GetWebContentsViewDelegate(this);
 
@@ -3770,6 +3777,7 @@ void WebContentsImpl::Init(const WebContents::CreateParams& params,
     view_ = CreateWebContentsView(this, std::move(delegate),
                                   &render_view_host_delegate_view_);
   }
+  }  // !view_
   CHECK(render_view_host_delegate_view_);
   CHECK(view_.get());
 
