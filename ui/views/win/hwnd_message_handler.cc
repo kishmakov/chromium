@@ -3596,14 +3596,29 @@ void HWNDMessageHandler::SizeWindowToAspectRatio(UINT param,
   delegate_->GetMinMaxSize(&min_window_size, &max_window_size);
   min_window_size = delegate_->DIPToScreenSize(min_window_size);
   max_window_size = delegate_->DIPToScreenSize(max_window_size);
+  // Add the native frame border size to the minimum and maximum size if the
+  // view reports its size as the client size.
+  if (delegate_->WidgetSizeIsClientSize()) {
+    RECT client_rect, rect;
+    GetClientRect(hwnd(), &client_rect);
+    GetWindowRect(hwnd(), &rect);
+    CR_DEFLATE_RECT(&rect, &client_rect);
+    min_window_size.Enlarge(rect.right - rect.left,
+                            rect.bottom - rect.top);
+    // Either axis may be zero, so enlarge them independently.
+    if (max_window_size.width())
+      max_window_size.Enlarge(rect.right - rect.left, 0);
+    if (max_window_size.height())
+      max_window_size.Enlarge(0, rect.bottom - rect.top);
+  }
 
   std::optional<gfx::Size> max_size_param;
   if (!max_window_size.IsEmpty())
     max_size_param = max_window_size;
 
-  gfx::SizeRectToAspectRatioWithExcludedMargin(
+  gfx::SizeRectToAspectRatio(
       GetWindowResizeEdge(param), aspect_ratio_.value(), min_window_size,
-      max_size_param, excluded_margin_, *window_rect);
+      max_size_param, window_rect);
 }
 
 POINT HWNDMessageHandler::GetCursorPos() const {
