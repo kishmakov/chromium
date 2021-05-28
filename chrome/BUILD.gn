@@ -200,11 +200,16 @@ if (!is_android && !is_mac) {
           "common/crash_keys.h",
         ]
 
+        if (!is_electron_build) {
+          deps = [
+            ":packed_resources_integrity_header",
+          ]
+        }
+
         deps += [
           ":chrome_dll",
           ":chrome_exe_version",
           ":copy_first_run",
-          ":packed_resources_integrity_header",
           ":visual_elements_resources",
           "//base",
           "//build:branding_buildflags",

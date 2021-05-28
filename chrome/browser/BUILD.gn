@@ -4524,7 +4524,7 @@ static_library("browser") {
       ]
     }
 
-    if (!is_win) {
+    if (!is_win && !is_electron_build) {
       # On Windows, the hashes are embedded in //chrome:chrome_initial rather
       # than here in :chrome_dll.
       deps += [ "//chrome:packed_resources_integrity_header" ]
