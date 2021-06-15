@@ -304,6 +304,8 @@ def GetDefaultHostOs():
       'win32': 'win',
   }
   default_host_os = _PLATFORM_HOST_OS_MAP.get(sys.platform, sys.platform)
+  if "host_os=mac" in os.environ.get('GCLIENT_EXTRA_ARGS', ''):
+    default_host_os = 'mac'
   if default_host_os == 'mac' and platform.machine() == 'arm64':
     default_host_os = 'mac-arm64'
   return default_host_os
