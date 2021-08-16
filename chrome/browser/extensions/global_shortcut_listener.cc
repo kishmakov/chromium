@@ -8,6 +8,7 @@
 #include "base/not_fatal_until.h"
 #include "base/notreached.h"
 #include "content/public/browser/browser_thread.h"
+#include "content/public/browser/media_keys_listener_manager.h"
 #include "ui/base/accelerators/accelerator.h"
 
 using content::BrowserThread;
@@ -65,6 +66,22 @@ void GlobalShortcutListener::UnregisterAccelerator(
   accelerator_map_.erase(it);
   if (accelerator_map_.empty())
     StopListening();
+}
+
+// static
+void GlobalShortcutListener::SetShouldUseInternalMediaKeyHandling(bool should_use) {
+  if (content::MediaKeysListenerManager::
+            IsMediaKeysListenerManagerEnabled()) {
+    content::MediaKeysListenerManager* media_keys_listener_manager =
+        content::MediaKeysListenerManager::GetInstance();
+    DCHECK(media_keys_listener_manager);
+
+    if (should_use) {
+      media_keys_listener_manager->EnableInternalMediaKeyHandling();
+    } else {
+      media_keys_listener_manager->DisableInternalMediaKeyHandling();
+    }
+  }
 }
 
 void GlobalShortcutListener::UnregisterAccelerators(Observer* observer) {

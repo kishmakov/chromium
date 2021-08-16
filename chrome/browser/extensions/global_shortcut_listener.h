@@ -34,6 +34,8 @@ class GlobalShortcutListener {
 
   static GlobalShortcutListener* GetInstance();
 
+  static void SetShouldUseInternalMediaKeyHandling(bool should_use);
+
   // Register an observer for when a certain |accelerator| is struck. Returns
   // true if register successfully, or false if 1) the specificied |accelerator|
   // has been registered by another caller or other native applications, or
