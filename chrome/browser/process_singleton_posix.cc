@@ -59,6 +59,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <tuple>
 #include <type_traits>
 
 #include "base/base_paths.h"
@@ -86,6 +87,7 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/task/sequenced_task_runner_helpers.h"
 #include "base/task/single_thread_task_runner.h"
+#include "base/threading/thread_restrictions.h"
 #include "base/threading/platform_thread.h"
 #include "base/time/time.h"
 #include "base/timer/timer.h"
@@ -102,7 +104,7 @@
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/base/resource/scoped_startup_resource_bundle.h"
 
-#if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+#if 0
 #include "chrome/browser/ui/process_singleton_dialog_linux.h"
 #endif
 
@@ -348,6 +350,8 @@ bool SymlinkPath(const base::FilePath& target, const base::FilePath& path) {
 bool DisplayProfileInUseError(const base::FilePath& lock_path,
                               const std::string& hostname,
                               int pid) {
+  return true;
+#if 0
   // Ensure there is an instance of ResourceBundle that is initialized for
   // localized string resource accesses.
   ui::ScopedStartupResourceBundle ensure_startup_resource_bundle;
@@ -370,6 +374,8 @@ bool DisplayProfileInUseError(const base::FilePath& lock_path,
 #endif
 
   NOTREACHED();
+  return false;
+#endif
 }
 
 bool IsChromeProcess(pid_t pid) {
@@ -380,6 +386,21 @@ bool IsChromeProcess(pid_t pid) {
   return (!other_chrome_path.empty() &&
           other_chrome_path.BaseName() ==
               base::FilePath(chrome::kBrowserProcessExecutableName));
+}
+
+bool IsAppSandboxed() {
+#if BUILDFLAG(IS_MAC)
+  // NB: There is no sane API for this, we have to just guess by
+  // reading tea leaves
+  base::FilePath home_dir;
+  if (!base::PathService::Get(base::DIR_HOME, &home_dir)) {
+    return false;
+  }
+
+  return home_dir.value().find("Library/Containers") != std::string::npos;
+#else
+  return false;
+#endif  // BUILDFLAG(IS_MAC)
 }
 
 // A helper class to hold onto a socket.
@@ -785,6 +806,10 @@ ProcessSingleton::~ProcessSingleton() {
   if (watcher_) {
     watcher_->OnEminentProcessSingletonDestruction();
   }
+  // Manually free resources with IO explicitly allowed.
+  base::ScopedAllowBlocking allow_blocking;
+  watcher_ = nullptr;
+  std::ignore = socket_dir_.Delete();
 }
 
 ProcessSingleton::NotifyResult ProcessSingleton::NotifyOtherProcess() {
@@ -1055,9 +1080,30 @@ bool ProcessSingleton::Create() {
   // Create the socket file somewhere in /tmp which is usually mounted as a
   // normal filesystem. Some network filesystems (notably AFS) are screwy and
   // do not support Unix domain sockets.
-  if (!socket_dir_.CreateUniqueTempDir()) {
-    LOG(ERROR) << "Failed to create socket directory.";
+  base::FilePath tmp_dir;
+  if (!base::GetTempDir(&tmp_dir)) {
+    LOG(ERROR) << "Failed to get temporary directory.";
     return false;
+  }
+
+  if (IsAppSandboxed()) {
+    // For sandboxed applications, the tmp dir could be too long to fit
+    // addr->sun_path, so we need to make it as short as possible.
+    if (!socket_dir_.Set(tmp_dir.Append("S"))) {
+      LOG(ERROR) << "Failed to set socket directory.";
+      return false;
+    }
+  } else {
+    // Create the socket file somewhere in /tmp which is usually mounted as a
+    // normal filesystem. Some network filesystems (notably AFS) are screwy and
+    // do not support Unix domain sockets.
+    // Prefer CreateUniqueTempDirUnderPath rather than CreateUniqueTempDir as
+    // the latter will calculate unique paths based on bundle ids which can
+    // increase the socket path length than what is allowed.
+    if (!socket_dir_.CreateUniqueTempDirUnderPath(tmp_dir)) {
+      LOG(ERROR) << "Failed to create socket directory.";
+      return false;
+    }
   }
 
   // Check that the directory was created with the correct permissions.
