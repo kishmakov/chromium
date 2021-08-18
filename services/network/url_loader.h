@@ -708,6 +708,8 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) URLLoader
   std::unique_ptr<ResourceScheduler::ScheduledResourceRequest>
       resource_scheduler_request_handle_;
 
+  // Whether client requested raw headers.
+  bool report_raw_headers_ = false;
   bool enable_reporting_raw_headers_ = false;
   bool seen_raw_request_headers_ = false;
   // Used for metrics.

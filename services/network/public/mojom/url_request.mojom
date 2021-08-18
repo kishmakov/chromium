@@ -81,6 +81,9 @@ struct TrustedUrlRequestParams {
   // client which should not be able to see them.
   bool include_request_cookies_with_response = false;
 
+  // [Electron] Whether to provide unfiltered response headers.
+  bool report_raw_headers;
+
   // Observer which should be notified when this URLRequest reads or writes
   // a cookie. If this is set to non-null, the observer passed to
   // URLLoaderFactory will be ignored.

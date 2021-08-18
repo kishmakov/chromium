@@ -94,6 +94,7 @@ bool StructTraits<network::mojom::TrustedUrlRequestParamsDataView,
   out->allow_cookies_from_browser = data.allow_cookies_from_browser();
   out->include_request_cookies_with_response =
       data.include_request_cookies_with_response();
+  out->report_raw_headers = data.report_raw_headers();
   out->cookie_observer = data.TakeCookieObserver<
       mojo::PendingRemote<network::mojom::CookieAccessObserver>>();
   out->trust_token_observer = data.TakeTrustTokenObserver<
