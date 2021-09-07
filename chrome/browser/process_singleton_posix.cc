@@ -615,6 +615,7 @@ class ProcessSingleton::LinuxWatcher
   // |reader| is for sending back ACK message.
   void HandleMessage(const std::string& current_dir,
                      const std::vector<std::string>& argv,
+                     const std::vector<uint8_t> additional_data,
                      SocketReader* reader);
 
   // Called when the ProcessSingleton that owns this class is about to be
@@ -674,13 +675,17 @@ void ProcessSingleton::LinuxWatcher::StartListening(int socket) {
 }
 
 void ProcessSingleton::LinuxWatcher::HandleMessage(
-    const std::string& current_dir, const std::vector<std::string>& argv,
+    const std::string& current_dir,
+    const std::vector<std::string>& argv,
+    const std::vector<uint8_t> additional_data,
     SocketReader* reader) {
   DCHECK(ui_task_runner_->BelongsToCurrentThread());
   DCHECK(reader);
 
   if (parent_ && parent_->notification_callback_.Run(
-                     base::CommandLine(argv), base::FilePath(current_dir))) {
+                     base::CommandLine(argv),
+                     base::FilePath(current_dir),
+                     std::move(additional_data))) {
     // Send back "ACK" message to prevent the client process from starting up.
     reader->FinishWithACK(kACKToken, std::size(kACKToken) - 1);
   } else {
@@ -728,7 +733,8 @@ void ProcessSingleton::LinuxWatcher::SocketReader::
     }
   }
 
-  // Validate the message.  The shortest message is kStartToken\0x\0x
+  // Validate the message.  The shortest message kStartToken\0\00
+  // The shortest message with additional data is kStartToken\0\00\00\0.
   const size_t kMinMessageLength = std::size(kStartToken) + 4;
   if (bytes_read_ < kMinMessageLength) {
     buf_[bytes_read_] = 0;
@@ -758,10 +764,28 @@ void ProcessSingleton::LinuxWatcher::SocketReader::
   tokens.erase(tokens.begin());
   tokens.erase(tokens.begin());
 
+  size_t num_args;
+  base::StringToSizeT(tokens[0], &num_args);
+  std::vector<std::string> command_line(tokens.begin() + 1, tokens.begin() + 1 + num_args);
+
+  std::vector<uint8_t> additional_data;
+  if (tokens.size() >= 3 + num_args) {
+    size_t additional_data_size;
+    base::StringToSizeT(tokens[1 + num_args], &additional_data_size);
+    std::string remaining_args = base::JoinString(
+        base::make_span(tokens.begin() + 2 + num_args, tokens.end()),
+        std::string(1, kTokenDelimiter));
+    const uint8_t* additional_data_bits =
+        reinterpret_cast<const uint8_t*>(remaining_args.c_str());
+    additional_data = std::vector<uint8_t>(
+        additional_data_bits, additional_data_bits + additional_data_size);
+  }
+
   // Return to the UI thread to handle opening a new browser tab.
   ui_task_runner_->PostTask(
       FROM_HERE, base::BindOnce(&ProcessSingleton::LinuxWatcher::HandleMessage,
-                                parent_, current_dir, tokens, this));
+                                parent_, current_dir, command_line,
+                                std::move(additional_data), this));
   fd_watch_controller_.reset();
 
   // LinuxWatcher::HandleMessage() is in charge of destroying this SocketReader
@@ -790,8 +814,10 @@ void ProcessSingleton::LinuxWatcher::SocketReader::FinishWithACK(
 //
 ProcessSingleton::ProcessSingleton(
     const base::FilePath& user_data_dir,
+    const base::raw_span<const uint8_t> additional_data,
     const NotificationCallback& notification_callback)
     : notification_callback_(notification_callback),
+      additional_data_(additional_data),
       current_pid_(base::GetCurrentProcId()) {
   socket_path_ = user_data_dir.Append(chrome::kSingletonSocketFilename);
   lock_path_ = user_data_dir.Append(chrome::kSingletonLockFilename);
@@ -912,7 +938,8 @@ ProcessSingleton::NotifyResult ProcessSingleton::NotifyOtherProcessWithTimeout(
              sizeof(socket_timeout));
 
   // Found another process, prepare our command line
-  // format is "START\0<current dir>\0<argv[0]>\0...\0<argv[n]>".
+  // format is "START\0<current-dir>\0<n-args>\0<argv[0]>\0...\0<argv[n]>
+  // \0<additional-data-length>\0<additional-data>".
   std::string to_send(kStartToken);
   to_send.push_back(kTokenDelimiter);
 
@@ -922,9 +949,19 @@ ProcessSingleton::NotifyResult ProcessSingleton::NotifyOtherProcessWithTimeout(
   to_send.append(current_dir.value());
 
   const std::vector<std::string>& argv = cmd_line.argv();
+  to_send.push_back(kTokenDelimiter);
+  to_send.append(base::NumberToString(argv.size()));
   for (auto it = argv.begin(); it != argv.end(); ++it) {
     to_send.push_back(kTokenDelimiter);
     to_send.append(*it);
+  }
+
+  size_t data_to_send_size = additional_data_.size_bytes();
+  if (data_to_send_size) {
+    to_send.push_back(kTokenDelimiter);
+    to_send.append(base::NumberToString(data_to_send_size));
+    to_send.push_back(kTokenDelimiter);
+    to_send.append(reinterpret_cast<const char*>(additional_data_.data()), data_to_send_size);
   }
 
   // Send the message
