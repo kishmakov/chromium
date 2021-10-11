@@ -300,11 +300,8 @@ void LoadV8SnapshotFile(const base::CommandLine& command_line) {
 
 bool ShouldLoadV8Snapshot(const base::CommandLine& command_line,
                           const std::string& process_type) {
-  // The gpu does not need v8, and the browser only needs v8 when in single
-  // process mode.
-  if (process_type == switches::kGpuProcess ||
-      (process_type.empty() &&
-       !command_line.HasSwitch(switches::kSingleProcess))) {
+  // The gpu does not need v8
+  if (process_type == switches::kGpuProcess) {
     return false;
   }
   return true;
