@@ -250,10 +250,12 @@ class FullscreenController : public ExclusiveAccessControllerBase {
   // Used in testing to set the state to tab fullscreen.
   bool is_tab_fullscreen_for_testing_ = false;
 
+#if 0
   // Tracks related popups that lost activation or were shown without activation
   // during content fullscreen sessions. This also activates the popups when
   // fullscreen exits, to prevent sites from creating persistent popunders.
   std::unique_ptr<PopunderPreventer> popunder_preventer_;
+#endif
 
   base::ObserverList<FullscreenObserver> observer_list_;
 
