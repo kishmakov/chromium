@@ -41,6 +41,9 @@ using SkColor = uint32_t;
 
 namespace gtk {
 
+// Get handle to the currently loaded gdk_pixbuf library in the process.
+void* GetLibGdkPixbuf();
+
 // Loads libgtk and related libraries and returns true on success.
 bool LoadGtk();
 

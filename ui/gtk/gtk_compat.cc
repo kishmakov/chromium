@@ -66,11 +66,6 @@ void* GetLibGio() {
   return libgio;
 }
 
-void* GetLibGdkPixbuf() {
-  static void* libgdk_pixbuf = DlOpen("libgdk_pixbuf-2.0.so.0");
-  return libgdk_pixbuf;
-}
-
 void* GetLibGdk3() {
   static void* libgdk3 = DlOpen("libgdk-3.so.0");
   return libgdk3;
@@ -133,6 +128,11 @@ gfx::Insets InsetsFromGtkBorder(const GtkBorder& border) {
 }
 
 }  // namespace
+
+void* GetLibGdkPixbuf() {
+  static void* libgdk_pixbuf = DlOpen("libgdk_pixbuf-2.0.so.0");
+  return libgdk_pixbuf;
+}
 
 bool LoadGtk() {
   static bool loaded = LoadGtkImpl();
