@@ -230,8 +230,17 @@ class API_AVAILABLE(macos(12.3)) ScreenCaptureKitDeviceMac
           // fallback. See https://crbug.com/325530044.
           if (source_.id == display.displayID ||
               source_.id == webrtc::kFullDesktopScreenId) {
+            NSArray<NSWindow*>* exclude_ns_windows = [[[NSApplication sharedApplication] windows] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSWindow* win, NSDictionary *bindings) {
+              return [win sharingType] == NSWindowSharingNone;
+            }]];
+            NSArray<SCWindow*>* exclude_windows = [[content windows] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(SCWindow* win, NSDictionary *bindings) {
+              for (NSWindow* excluded : exclude_ns_windows) {
+                if ((CGWindowID)[excluded windowNumber] == [win windowID]) return true;
+              }
+              return false;
+            }]];
             filter = [[SCContentFilter alloc] initWithDisplay:display
-                                             excludingWindows:@[]];
+                                             excludingWindows:exclude_windows];
             stream_config_content_size_ =
                 gfx::Size(display.width, display.height);
             break;
