@@ -200,6 +200,9 @@ RenderProcessImpl::RenderProcessImpl()
     v8::V8::SetFlagsFromString(kSABPerContextFlag, sizeof(kSABPerContextFlag));
   }
 
+  // Freezing flags after init conflicts with node in the renderer.
+  v8::V8::SetFlagsFromString("--no-freeze-flags-after-init");
+
   if (base::FeatureList::IsEnabled(features::kWebAssemblyTrapHandler)) {
     content::GetContentClient()->renderer()->SetUpWebAssemblyTrapHandler();
   }
