@@ -1282,6 +1282,10 @@ void DesktopWindowTreeHostWin::HandleHeadlessWindowBoundsChanged(
   window()->SetProperty(aura::client::kHeadlessBoundsKey, bounds);
 }
 
+bool DesktopWindowTreeHostWin::HandleMouseEventForCaption(UINT message) const {
+  return false;
+}
+
 DesktopNativeCursorManager*
 DesktopWindowTreeHostWin::GetSingletonDesktopNativeCursorManager() {
   return new DesktopNativeCursorManagerWin();

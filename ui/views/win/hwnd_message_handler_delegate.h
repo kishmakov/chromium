@@ -255,6 +255,10 @@ class VIEWS_EXPORT HWNDMessageHandlerDelegate {
   // Called when the headless window bounds has changed.
   virtual void HandleHeadlessWindowBoundsChanged(const gfx::Rect& bounds) = 0;
 
+  // Called when synthetic mouse event is generated for touch event on
+  // caption buttons.
+  virtual bool HandleMouseEventForCaption(UINT message) const = 0;
+
  protected:
   virtual ~HWNDMessageHandlerDelegate() = default;
 };

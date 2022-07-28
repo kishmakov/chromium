@@ -3042,15 +3042,19 @@ LRESULT HWNDMessageHandler::HandleMouseEventInternal(UINT message,
       SetMsgHandled(FALSE);
     // We must let Windows handle the caption buttons if it's drawing them, or
     // they won't work.
+    bool simulate_mouse_event_for_caption = false;
     if (delegate_->GetFrameMode() == FrameMode::SYSTEM_DRAWN &&
         (hittest == HTCLOSE || hittest == HTMINBUTTON ||
          hittest == HTMAXBUTTON)) {
-      SetMsgHandled(FALSE);
+      simulate_mouse_event_for_caption =
+          delegate_->HandleMouseEventForCaption(message);
+      if (!simulate_mouse_event_for_caption)
+        SetMsgHandled(FALSE);
     }
     // Let resize events fall through. Ignore everything else, as we're either
     // letting Windows handle it above or we've already handled the equivalent
     // touch message.
-    if (!IsHitTestOnResizeHandle(hittest))
+    if (!IsHitTestOnResizeHandle(hittest) && !simulate_mouse_event_for_caption)
       return 0;
   }
 
