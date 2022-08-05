@@ -279,8 +279,13 @@ void AsanProcessInfoCB(const char*, bool*) {
 }
 #endif  // defined(ADDRESS_SANITIZER)
 
-void LoadV8SnapshotFile(const base::CommandLine& command_line) {
+void LoadV8SnapshotFile(const raw_ptr<ContentMainDelegate> delegate, const base::CommandLine& command_line) {
   const gin::V8SnapshotFileType snapshot_type = GetSnapshotType(command_line);
+  std::string_view browser_v8_snapshot_file_name = delegate->GetBrowserV8SnapshotFilename();
+  if (!browser_v8_snapshot_file_name.empty()) {
+    gin::V8Initializer::LoadV8SnapshotFromFileName(browser_v8_snapshot_file_name, snapshot_type);
+    return;
+  }
 #if BUILDFLAG(IS_POSIX) && !BUILDFLAG(IS_MAC)
   base::FileDescriptorStore& file_descriptor_store =
       base::FileDescriptorStore::GetInstance();
@@ -309,11 +314,12 @@ bool ShouldLoadV8Snapshot(const base::CommandLine& command_line,
 
 #endif  // V8_USE_EXTERNAL_STARTUP_DATA
 
-void LoadV8SnapshotIfNeeded(const base::CommandLine& command_line,
+void LoadV8SnapshotIfNeeded(const raw_ptr<ContentMainDelegate> delegate,
+                            const base::CommandLine& command_line,
                             const std::string& process_type) {
 #if defined(V8_USE_EXTERNAL_STARTUP_DATA)
   if (ShouldLoadV8Snapshot(command_line, process_type))
-    LoadV8SnapshotFile(command_line);
+    LoadV8SnapshotFile(delegate, command_line);
 #endif  // V8_USE_EXTERNAL_STARTUP_DATA
 }
 
@@ -989,7 +995,7 @@ int ContentMainRunnerImpl::Initialize(ContentMainParams params) {
     return TerminateForFatalInitializationError();
 #endif  // BUILDFLAG(IS_ANDROID) && (ICU_UTIL_DATA_IMPL == ICU_UTIL_DATA_FILE)
 
-  LoadV8SnapshotIfNeeded(command_line, process_type);
+  LoadV8SnapshotIfNeeded(delegate_, command_line, process_type);
 
   blink::TrialTokenValidator::SetOriginTrialPolicyGetter(
       base::BindRepeating([]() -> blink::OriginTrialPolicy* {

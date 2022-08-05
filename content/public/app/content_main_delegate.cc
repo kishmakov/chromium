@@ -4,6 +4,8 @@
 
 #include "content/public/app/content_main_delegate.h"
 
+#include <string_view>
+
 #include "base/check.h"
 #include "build/build_config.h"
 #include "content/public/browser/content_browser_client.h"
@@ -89,6 +91,10 @@ void ContentMainDelegate::CreateThreadPool(std::string_view name) {
 std::optional<int> ContentMainDelegate::PostEarlyInitialization(
     InvokedIn invoked_in) {
   return std::nullopt;
+}
+
+std::string_view ContentMainDelegate::GetBrowserV8SnapshotFilename() {
+  return std::string_view();
 }
 
 ContentClient* ContentMainDelegate::CreateContentClient() {

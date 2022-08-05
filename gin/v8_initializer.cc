@@ -655,8 +655,7 @@ void V8Initializer::GetV8ExternalSnapshotData(const char** snapshot_data_out,
 
 #if defined(V8_USE_EXTERNAL_STARTUP_DATA)
 
-// static
-void V8Initializer::LoadV8Snapshot(V8SnapshotFileType snapshot_file_type) {
+void V8Initializer::LoadV8SnapshotFromFileName(std::string_view file_name, V8SnapshotFileType snapshot_file_type) {
   if (g_mapped_snapshot) {
     // TODO(crbug.com/40558459): Confirm not loading different type of snapshot
     // files in a process.
@@ -665,8 +664,15 @@ void V8Initializer::LoadV8Snapshot(V8SnapshotFileType snapshot_file_type) {
 
   base::MemoryMappedFile::Region file_region;
   base::File file =
-      OpenV8File(GetSnapshotFileName(snapshot_file_type), &file_region);
+      OpenV8File(file_name.data(), &file_region);
   LoadV8SnapshotFromFile(std::move(file), &file_region, snapshot_file_type);
+}
+
+// static
+void V8Initializer::LoadV8Snapshot(V8SnapshotFileType snapshot_file_type) {
+  const char* file_name = GetSnapshotFileName(snapshot_file_type);
+
+  LoadV8SnapshotFromFileName(file_name, snapshot_file_type);
 }
 
 // static

@@ -8,6 +8,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "build/build_config.h"
@@ -172,6 +173,8 @@ class CONTENT_EXPORT ContentMainDelegate {
   // swallow the event.
   virtual bool ShouldHandleConsoleControlEvents();
 #endif
+
+  virtual std::string_view GetBrowserV8SnapshotFilename();
 
  protected:
   friend class ContentClientCreator;
