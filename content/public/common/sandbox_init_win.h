@@ -29,7 +29,7 @@ class SandboxedProcessLauncherDelegate;
 CONTENT_EXPORT sandbox::ResultCode StartSandboxedProcess(
     SandboxedProcessLauncherDelegate* delegate,
     const base::CommandLine& target_command_line,
-    const base::HandlesToInheritVector& handles_to_inherit,
+    const base::LaunchOptions* options,
     sandbox::StartSandboxedProcessCallback result_callback);
 
 }  // namespace content

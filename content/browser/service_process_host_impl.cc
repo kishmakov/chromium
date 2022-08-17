@@ -205,6 +205,17 @@ void LaunchServiceProcess(mojo::GenericPendingReceiver receiver,
       options.allow_gpu_client.value()) {
     host->SetAllowGpuClient();
   }
+
+#if BUILDFLAG(IS_WIN)
+  host->SetStdioHandles(std::move(options.stdout_handle), std::move(options.stderr_handle));
+  host->SetFeedbackCursorOff(options.feedback_cursor_off);
+#elif BUILDFLAG(IS_POSIX)
+  host->SetAdditionalFds(std::move(options.fds_to_remap));
+#endif
+  host->SetCurrentDirectory(options.current_directory);
+  host->SetEnv(options.environment);
+  if (options.clear_environment)
+    host->ClearEnvironment();
   host->Start();
   host->GetChildProcess()->BindServiceInterface(std::move(receiver));
 }
