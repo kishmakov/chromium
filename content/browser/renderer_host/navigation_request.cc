@@ -10806,6 +10806,12 @@ NavigationRequest::GetOriginForURLLoaderFactoryUncheckedWithDebugInfo() {
         "blob");
   }
 
+  if (!common_params().url.IsStandard()) {
+    return std::make_pair(url::Origin::Resolve(common_params().url,
+                                               url::Origin()),
+                          "url_non_standard");
+  }
+
   // In cases not covered above, URLLoaderFactory should be associated with the
   // origin of |common_params.url| and/or |common_params.initiator_origin|.
   url::Origin resolved_origin = url::Origin::Resolve(
