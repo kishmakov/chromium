@@ -317,6 +317,7 @@ void ScriptInjection::InjectJs(std::set<std::string>* executing_scripts,
       blink::mojom::LoadEventBlockingOption::kBlock,
       base::BindOnce(&ScriptInjection::OnJsInjectionCompleted,
                      weak_ptr_factory_.GetWeakPtr()),
+      base::NullCallback(),
       blink::BackForwardCacheAware::kPossiblyDisallow,
       injector_->ExpectsResults(), injector_->ShouldWaitForPromise());
 }

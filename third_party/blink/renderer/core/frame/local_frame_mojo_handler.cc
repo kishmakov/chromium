@@ -964,6 +964,7 @@ void LocalFrameMojoHandler::JavaScriptExecuteRequestInIsolatedWorld(
             std::move(callback).Run(value ? std::move(*value) : base::Value());
           },
           std::move(callback)),
+      base::NullCallback(),
       BackForwardCacheAware::kAllow,
       wants_result
           ? mojom::blink::WantResultOption::kWantResultDateAndRegExpAllowed

@@ -291,6 +291,7 @@ void ExecuteScriptsInMainWorld(
       DOMWrapperWorld::kMainWorldId, sources, user_gesture,
       mojom::blink::EvaluationTiming::kSynchronous,
       mojom::blink::LoadEventBlockingOption::kDoNotBlock, std::move(callback),
+      base::NullCallback(),
       BackForwardCacheAware::kAllow,
       mojom::blink::WantResultOption::kWantResult, wait_for_promise);
 }

@@ -63,6 +63,7 @@ class VirtualTimeTest : public SimTest {
         mojom::blink::LoadEventBlockingOption::kDoNotBlock,
         WTF::BindOnce(&ScriptExecutionCallbackHelper::Completed,
                       base::Unretained(&callback_helper)),
+        base::NullCallback(),
         BackForwardCacheAware::kAllow,
         mojom::blink::WantResultOption::kWantResult,
         mojom::blink::PromiseResultOption::kDoNotWait);
