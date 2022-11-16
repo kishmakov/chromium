@@ -210,7 +210,7 @@ scoped_refptr<SiteInstanceImpl> SiteInstanceImpl::CreateForGuest(
     BrowserContext* browser_context,
     const StoragePartitionConfig& partition_config) {
   DCHECK(browser_context);
-  DCHECK(!partition_config.is_default());
+  // DCHECK(!partition_config.is_default());
 
   auto guest_site_info =
       SiteInfo::CreateForGuest(browser_context, partition_config);
