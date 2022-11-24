@@ -13,6 +13,7 @@
 #endif  // BUILDFLAG(IS_CHROMEOS)
 
 bool AreKeyedServicesDisabledForProfileByDefault(const Profile* profile) {
+#if 0
   // By default disable all services for System Profile.
   // Even though having no services is also the default value for Guest Profile,
   // this is not really the case in practice because a lot of Service Factories
@@ -20,7 +21,7 @@ bool AreKeyedServicesDisabledForProfileByDefault(const Profile* profile) {
   if (profile && profile->IsSystemProfile()) {
     return true;
   }
-
+#endif
   return false;
 }
 
