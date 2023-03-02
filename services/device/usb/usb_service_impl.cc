@@ -203,7 +203,7 @@ void UsbServiceImpl::GetDevices(GetDevicesCallback callback) {
     return;
   }
 
-  if (enumeration_in_progress_) {
+  if (enumeration_in_progress_ || !enumeration_ready_) {
     pending_enumeration_callbacks_.push_back(std::move(callback));
     return;
   }
