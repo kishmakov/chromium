@@ -20,6 +20,7 @@
 #include "v8/include/v8-value.h"
 
 using v8::ArrayBuffer;
+using v8::ArrayBufferView;
 using v8::External;
 using v8::Function;
 using v8::Int32;
@@ -243,6 +244,20 @@ bool Converter<Local<ArrayBuffer>>::FromV8(Isolate* isolate,
   if (!val->IsArrayBuffer())
     return false;
   *out = Local<ArrayBuffer>::Cast(val);
+  return true;
+}
+
+Local<Value> Converter<Local<ArrayBufferView>>::ToV8(Isolate* isolate,
+                                                 Local<ArrayBufferView> val) {
+  return val.As<Value>();
+}
+
+bool Converter<Local<ArrayBufferView>>::FromV8(Isolate* isolate,
+                                           Local<Value> val,
+                                           Local<ArrayBufferView>* out) {
+  if (!val->IsArrayBufferView())
+    return false;
+  *out = Local<ArrayBufferView>::Cast(val);
   return true;
 }
 

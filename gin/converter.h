@@ -191,6 +191,15 @@ struct GIN_EXPORT Converter<v8::Local<v8::ArrayBuffer> > {
 };
 
 template<>
+struct GIN_EXPORT Converter<v8::Local<v8::ArrayBufferView> > {
+  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
+                                    v8::Local<v8::ArrayBufferView> val);
+  static bool FromV8(v8::Isolate* isolate,
+                     v8::Local<v8::Value> val,
+                     v8::Local<v8::ArrayBufferView>* out);
+};
+
+template<>
 struct GIN_EXPORT Converter<v8::Local<v8::External> > {
   static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
                                     v8::Local<v8::External> val);
