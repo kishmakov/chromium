@@ -325,7 +325,7 @@ class CORE_EXPORT DocumentLoader : public GarbageCollected<DocumentLoader>,
       std::optional<scheduler::TaskAttributionId>
           soft_navigation_heuristics_task_id);
 
-  void SetDefersLoading(LoaderFreezeMode);
+  void SetDefersLoading(LoaderFreezeMode) override;
 
   DocumentLoadTiming& GetTiming() { return document_load_timing_; }
 
