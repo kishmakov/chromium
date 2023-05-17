@@ -45,6 +45,7 @@ namespace {
 // hierarchy is: enterprise policy > user choice > finch experiment.
 bool ShouldEnableSkiaRenderer(content::WebContents* contents) {
   CHECK(contents);
+#if 0
   const PrefService* prefs =
       Profile::FromBrowserContext(contents->GetBrowserContext())->GetPrefs();
 
@@ -52,6 +53,7 @@ bool ShouldEnableSkiaRenderer(content::WebContents* contents) {
   if (prefs->IsManagedPreference(prefs::kPdfUseSkiaRendererEnabled)) {
     return prefs->GetBoolean(prefs::kPdfUseSkiaRendererEnabled);
   }
+#endif
 
   //  When the enterprise policy is not set, use finch/feature flag choice.
   return base::FeatureList::IsEnabled(
