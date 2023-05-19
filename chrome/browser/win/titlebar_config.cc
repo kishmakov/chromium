@@ -12,8 +12,10 @@
 
 bool ShouldBrowserCustomDrawTitlebar(BrowserView* browser_view) {
   return !ShouldDefaultThemeUseMicaTitlebar() ||
+#if 0
          !ThemeServiceFactory::GetForProfile(browser_view->GetProfile())
               ->UsingSystemTheme() ||
+#endif
          (!browser_view->browser()->is_type_normal() &&
           !browser_view->browser()->is_type_popup() &&
           !browser_view->browser()->is_type_devtools());
