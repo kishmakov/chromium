@@ -138,6 +138,7 @@ class VIEWS_EXPORT MenuController final : public gfx::AnimationDelegate,
            MenuAnchorPosition position,
            bool context_menu,
            bool is_nested_drag,
+           ui::mojom::MenuSourceType source_type,
            gfx::NativeView native_view_for_gestures = gfx::NativeView());
 
   bool for_drop() const { return for_drop_; }

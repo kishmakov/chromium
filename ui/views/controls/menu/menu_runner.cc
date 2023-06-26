@@ -90,7 +90,7 @@ void MenuRunner::RunMenuAt(
   }
 
   impl_->RunMenuAt(parent, button_controller, bounds, anchor, run_types_,
-                   native_view_for_gestures, corners,
+                   source_type, native_view_for_gestures, corners,
                    std::move(show_menu_host_duration_histogram));
 }
 
