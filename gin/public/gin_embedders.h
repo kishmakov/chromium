@@ -18,6 +18,8 @@ namespace gin {
 enum GinEmbedder : uint16_t {
   kEmbedderNativeGin,
   kEmbedderBlink,
+  kEmbedderElectron,
+  kEmbedderBlinkTag,
   kEmbedderPDFium,
   kEmbedderFuchsia,
 };
