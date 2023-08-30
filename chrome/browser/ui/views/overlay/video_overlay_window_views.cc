@@ -358,11 +358,13 @@ std::unique_ptr<VideoOverlayWindowViews> VideoOverlayWindowViews::Create(
 
 #endif  // BUILDFLAG(IS_WIN)
 
+#if 0
   PictureInPictureOcclusionTracker* tracker =
       PictureInPictureWindowManager::GetInstance()->GetOcclusionTracker();
   if (tracker) {
     tracker->OnPictureInPictureWidgetOpened(overlay_window.get());
   }
+#endif
 
   return overlay_window;
 }
