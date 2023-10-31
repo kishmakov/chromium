@@ -174,7 +174,6 @@ std::vector<const UserScript*> GetLoadedDynamicScripts(
   UserScriptManager* manager =
       ExtensionSystem::Get(process.GetBrowserContext())->user_script_manager();
   if (!manager) {
-    CHECK_IS_TEST();
     return std::vector<const UserScript*>();
   }
 
