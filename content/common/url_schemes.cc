@@ -98,6 +98,14 @@ void RegisterContentSchemes(bool should_lock_registry) {
   for (auto& scheme : schemes.empty_document_schemes)
     url::AddEmptyDocumentScheme(scheme.c_str());
 
+  for (auto& scheme : schemes.code_cache_schemes) {
+    CHECK_NE(scheme, kChromeUIScheme);
+    CHECK_NE(scheme, kChromeUIUntrustedScheme);
+    CHECK_NE(scheme, url::kHttpScheme);
+    CHECK_NE(scheme, url::kHttpsScheme);
+    url::AddCodeCacheScheme(scheme.c_str());
+  }
+
 #if BUILDFLAG(IS_ANDROID)
   if (schemes.allow_non_standard_schemes_in_origins)
     url::EnableNonStandardSchemesForAndroidWebView();
