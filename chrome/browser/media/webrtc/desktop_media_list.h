@@ -148,6 +148,8 @@ class DesktopMediaList {
   // source lists that need to be displayed independently from when the
   // DesktopMediaList gains focus.
   virtual void ShowDelegatedList() = 0;
+
+  int skip_next_refresh_ = 0;
 };
 
 #endif  // CHROME_BROWSER_MEDIA_WEBRTC_DESKTOP_MEDIA_LIST_H_

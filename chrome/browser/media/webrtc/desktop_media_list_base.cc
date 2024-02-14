@@ -236,7 +236,11 @@ uint32_t DesktopMediaListBase::GetImageHash(const gfx::Image& image) {
 void DesktopMediaListBase::OnRefreshComplete() {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   DCHECK(refresh_callback_);
-  std::move(refresh_callback_).Run();
+  if (skip_next_refresh_ > 0) {
+    skip_next_refresh_--;
+  } else {
+    std::move(refresh_callback_).Run();
+  }
 }
 
 void DesktopMediaListBase::ScheduleNextRefresh() {
