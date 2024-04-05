@@ -107,7 +107,7 @@ FrameCaptionButton::FrameCaptionButton(PressedCallback callback,
 FrameCaptionButton::~FrameCaptionButton() = default;
 
 // static
-SkColor FrameCaptionButton::GetButtonColor(SkColor background_color) {
+SkColor FrameCaptionButton::GetAccessibleButtonColor(SkColor background_color) {
   // Use IsDark() to change target colors instead of PickContrastingColor(), so
   // that DefaultFrameHeader::GetTitleColor() (which uses different target
   // colors) can change between light/dark targets at the same time.  It looks
@@ -122,6 +122,22 @@ SkColor FrameCaptionButton::GetButtonColor(SkColor background_color) {
              default_foreground, background_color, high_contrast_foreground,
              color_utils::kMinimumVisibleContrastRatio)
       .color;
+}
+
+SkColor FrameCaptionButton::GetButtonColor(SkColor background_color) {
+  // If the button color has been overridden, return that.
+  if (button_color_ != SkColor())
+    return button_color_;
+
+  return GetAccessibleButtonColor(background_color);
+}
+
+void FrameCaptionButton::SetButtonColor(SkColor button_color) {
+  if (button_color_ == button_color)
+    return;
+
+  button_color_ = button_color;
+  MaybeRefreshIconAndInkdropBaseColor();
 }
 
 // static
