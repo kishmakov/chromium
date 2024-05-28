@@ -515,7 +515,7 @@ void UtilityProcessHost::OnProcessCrashed(int exit_code) {
   // Take ownership of |client_| so the destructor doesn't notify it of
   // termination.
   auto client = std::move(client_);
-  client->OnProcessCrashed();
+  client->OnProcessCrashed(exit_code);
 }
 
 std::optional<std::string> UtilityProcessHost::GetServiceName() {

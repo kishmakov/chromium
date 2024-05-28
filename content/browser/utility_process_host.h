@@ -79,7 +79,7 @@ class CONTENT_EXPORT UtilityProcessHost
 
     virtual void OnProcessLaunched(const base::Process& process) {}
     virtual void OnProcessTerminatedNormally() {}
-    virtual void OnProcessCrashed() {}
+    virtual void OnProcessCrashed(int exit_code) {}
   };
 
   // This class is self-owned. It must be instantiated using new, and shouldn't

@@ -73,12 +73,15 @@ class ServiceProcessTracker {
     processes_.erase(iter);
   }
 
-  void NotifyCrashed(ServiceProcessId id) {
+  void NotifyCrashed(ServiceProcessId id, int exit_code) {
     DCHECK_CURRENTLY_ON(BrowserThread::UI);
     auto iter = processes_.find(id);
     CHECK(iter != processes_.end(), base::NotFatalUntil::M130);
-    for (auto& observer : observers_)
-      observer.OnServiceProcessCrashed(iter->second.Duplicate());
+    for (auto& observer : observers_) {
+      auto params = iter->second.Duplicate();
+      params.set_exit_code(exit_code);
+      observer.OnServiceProcessCrashed(params);
+    }
     processes_.erase(iter);
   }
 
@@ -154,7 +157,7 @@ class UtilityProcessClient : public UtilityProcessHost::Client {
         process_info_->service_process_id());
   }
 
-  void OnProcessCrashed() override {
+  void OnProcessCrashed(int exit_code) override {
     // TODO(crbug.com/40654042): It is unclear how we can observe
     // |OnProcessCrashed()| without observing |OnProcessLaunched()| first, but
     // it can happen on Android. Ignore the notification in this case.
@@ -162,7 +165,7 @@ class UtilityProcessClient : public UtilityProcessHost::Client {
       return;
 
     GetServiceProcessTracker().NotifyCrashed(
-        process_info_->service_process_id());
+        process_info_->service_process_id(), exit_code);
   }
 
  private:
