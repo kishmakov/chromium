@@ -85,9 +85,6 @@ source_set("mixers") {
     ]
   }
 
-  if (is_chromeos || is_linux || is_mac || is_win) {
-    deps += [ "//chrome/browser/themes" ]
-  }
 }
 
 if (!is_ios && !is_android) {
