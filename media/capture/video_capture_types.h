@@ -355,6 +355,8 @@ struct CAPTURE_EXPORT VideoCaptureParams {
   // Flag indicating whether HiDPI mode should be enabled for tab capture
   // sessions.
   bool is_high_dpi_enabled = true;
+
+  std::optional<bool> use_native_picker;
 };
 
 CAPTURE_EXPORT std::ostream& operator<<(
