@@ -342,8 +342,9 @@ bool ResolveShortcutProperties(const FilePath& shortcut_path,
               *(pv_toast_activator_clsid.get().puuid));
           break;
         default:
-          NOTREACHED() << "Unexpected variant type: "
-                       << pv_toast_activator_clsid.get().vt;
+          // Shortcuts may use strings to represent the CLSID. This case is
+          // ignored.
+          break;
       }
     }
   }
