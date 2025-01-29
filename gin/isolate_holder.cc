@@ -34,6 +34,8 @@ v8::ArrayBuffer::Allocator* g_array_buffer_allocator = nullptr;
 const intptr_t* g_reference_table = nullptr;
 v8::FatalErrorCallback g_fatal_error_callback = nullptr;
 v8::OOMErrorCallback g_oom_error_callback = nullptr;
+bool g_initialized_microtasks_runner = false;
+bool g_destroyed_microtasks_runner = false;
 
 std::unique_ptr<v8::Isolate::CreateParams> getModifiedIsolateParams(
     std::unique_ptr<v8::Isolate::CreateParams> params,
@@ -194,10 +196,26 @@ IsolateHolder::getDefaultIsolateParams() {
   return params;
 }
 
+// static
+bool IsolateHolder::DestroyedMicrotasksRunner() {
+  return g_initialized_microtasks_runner &&
+         g_destroyed_microtasks_runner;
+}
+
 void IsolateHolder::EnableIdleTasks(
     std::unique_ptr<V8IdleTaskRunner> idle_task_runner) {
   DCHECK(isolate_data_.get());
   isolate_data_->EnableIdleTasks(std::move(idle_task_runner));
+}
+
+void IsolateHolder::WillCreateMicrotasksRunner() {
+  DCHECK(!g_initialized_microtasks_runner);
+  g_initialized_microtasks_runner = true;
+}
+
+void IsolateHolder::WillDestroyMicrotasksRunner() {
+  DCHECK(g_initialized_microtasks_runner);
+  g_destroyed_microtasks_runner = true;
 }
 
 }  // namespace gin

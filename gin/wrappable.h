@@ -80,6 +80,13 @@ class GIN_EXPORT WrappableBase {
   v8::MaybeLocal<v8::Object> GetWrapperImpl(v8::Isolate* isolate,
                                             WrapperInfo* wrapper_info);
 
+  // Make this wrappable strong again. This is useful when the wrappable is
+  // destroyed outside the finalizer callbacks and we want to avoid scheduling
+  // the weak callbacks if they haven't been scheduled yet.
+  // NOTE!!! this does not prevent finalization callbacks from running if they
+  // have already been processed.
+  void ClearWeak();
+
  private:
   static void FirstWeakCallback(
       const v8::WeakCallbackInfo<WrappableBase>& data);

@@ -130,6 +130,8 @@ class GIN_EXPORT IsolateHolder {
   // Should only be called after v8::IsolateHolder::Initialize() is invoked.
   static std::unique_ptr<v8::Isolate::CreateParams> getDefaultIsolateParams();
 
+  static bool DestroyedMicrotasksRunner();
+
   v8::Isolate* isolate() { return isolate_; }
 
   // This method returns if v8::Locker is needed to access isolate.
@@ -142,6 +144,9 @@ class GIN_EXPORT IsolateHolder {
   }
 
   void EnableIdleTasks(std::unique_ptr<V8IdleTaskRunner> idle_task_runner);
+
+  void WillCreateMicrotasksRunner();
+  void WillDestroyMicrotasksRunner();
 
   // This method returns V8IsolateMemoryDumpProvider of this isolate, used for
   // testing.
