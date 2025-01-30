@@ -99,6 +99,8 @@ std::string GetPermissionString(PermissionType permission) {
       return "AutomaticFullscreen";
     case PermissionType::WEB_APP_INSTALLATION:
       return "WebAppInstallation";
+    case PermissionType::DEPRECATED_SYNC_CLIPBOARD_READ:
+      return "DeprecatedSyncClipboardRead";
     case PermissionType::NUM:
       NOTREACHED();
   }
@@ -171,6 +173,7 @@ PermissionTypeToPermissionsPolicyFeature(PermissionType permission) {
     case PermissionType::NOTIFICATIONS:
     case PermissionType::KEYBOARD_LOCK:
     case PermissionType::POINTER_LOCK:
+    case PermissionType::DEPRECATED_SYNC_CLIPBOARD_READ:
       return std::nullopt;
 
     case PermissionType::NUM:

@@ -364,6 +364,7 @@ ContentSettingsType PermissionUtil::PermissionTypeToContentSettingsTypeSafe(
       return ContentSettingsType::AUTOMATIC_FULLSCREEN;
     case PermissionType::WEB_APP_INSTALLATION:
       return ContentSettingsType::WEB_APP_INSTALLATION;
+    case PermissionType::DEPRECATED_SYNC_CLIPBOARD_READ:
     case PermissionType::NUM:
       break;
   }

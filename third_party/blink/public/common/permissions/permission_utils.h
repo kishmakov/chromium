@@ -64,6 +64,7 @@ enum class PermissionType {
   AUTOMATIC_FULLSCREEN = 40,
   HAND_TRACKING = 41,
   WEB_APP_INSTALLATION = 42,
+  DEPRECATED_SYNC_CLIPBOARD_READ = 43,
 
   // Always keep this at the end.
   NUM,

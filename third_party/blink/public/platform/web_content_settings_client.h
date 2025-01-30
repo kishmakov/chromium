@@ -55,6 +55,9 @@ class WebContentSettingsClient {
   // Controls whether access to write the clipboard is allowed for this frame.
   virtual bool AllowWriteToClipboard() { return false; }
 
+  // Controls whether synchronous access to read the clipboard is allowed for this frame.
+  virtual bool AllowReadFromClipboardSync() { return false; }
+
   // Controls whether to enable MutationEvents for this frame.
   // The common use case of this method is actually to selectively disable
   // MutationEvents, but it's been named for consistency with the rest of the
