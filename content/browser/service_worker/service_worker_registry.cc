@@ -1076,7 +1076,8 @@ ServiceWorkerRegistry::GetOrCreateRegistration(
     if (data.policy_container_policies) {
       version->set_policy_container_host(
           base::MakeRefCounted<PolicyContainerHost>(
-              PolicyContainerPolicies(*data.policy_container_policies)));
+              PolicyContainerPolicies(*data.policy_container_policies,
+                                      /*is_web_secure_context=*/true)));
     }
     if (data.router_rules && version->IsStaticRouterEnabled()) {
       auto error = version->SetupRouterEvaluator(*data.router_rules);
