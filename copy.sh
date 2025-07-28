@@ -6,6 +6,7 @@ else
 	DEST_DIR="/home/kishmakov/Repos/vs/vscode/.build/electron"
 fi
 
+echo "cp \"$SOURCE_DIR/electron\" \"$DEST_DIR/code-oss\""
 cp "$SOURCE_DIR/electron" "$DEST_DIR/code-oss"
 
 FILES=(
@@ -20,5 +21,6 @@ FILES=(
 )
 
 for file in "${FILES[@]}"; do
+	echo "cp \"$SOURCE_DIR/$file\" \"$DEST_DIR/\""
 	cp "$SOURCE_DIR/$file" "$DEST_DIR/"
 done
