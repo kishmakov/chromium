@@ -1,0 +1,111 @@
+
+# ===== PATCH FROM: /home/kishmakov/build/bd/src/electron =====
+
+diff --git a/shell/browser/electron_browser_context.cc b/shell/browser/electron_browser_context.cc
+index 652259922c..e53f66ed15 100644
+--- a/shell/browser/electron_browser_context.cc
++++ b/shell/browser/electron_browser_context.cc
+@@ -425,8 +425,8 @@ void ElectronBrowserContext::InitPrefs() {
+   MediaDeviceIDSalt::RegisterPrefs(registry.get());
+   ZoomLevelDelegate::RegisterPrefs(registry.get());
+   PrefProxyConfigTrackerImpl::RegisterPrefs(registry.get());
+-  ElectronAccessibilityUIMessageHandler::RegisterPrefs(registry.get());
+ #if BUILDFLAG(ENABLE_ELECTRON_EXTENSIONS)
++  ElectronAccessibilityUIMessageHandler::RegisterPrefs(registry.get());
+   if (!in_memory_)
+     extensions::ExtensionPrefs::RegisterProfilePrefs(registry.get());
+   extensions::PermissionsManager::RegisterProfilePrefs(registry.get());
+diff --git a/shell/browser/usb/electron_usb_delegate.cc b/shell/browser/usb/electron_usb_delegate.cc
+index 808b878393..319500c01f 100644
+--- a/shell/browser/usb/electron_usb_delegate.cc
++++ b/shell/browser/usb/electron_usb_delegate.cc
+@@ -13,7 +13,6 @@
+ #include "content/public/browser/render_frame_host.h"
+ #include "content/public/browser/web_contents.h"
+ #include "electron/buildflags/buildflags.h"
+-#include "services/device/public/mojom/usb_enumeration_options.mojom.h"
+ #include "shell/browser/electron_browser_context.h"
+ #include "shell/browser/electron_permission_manager.h"
+ #include "shell/browser/usb/usb_chooser_context.h"
+@@ -29,6 +28,7 @@
+ #include "extensions/common/constants.h"
+ #include "extensions/common/extension.h"
+ #include "services/device/public/mojom/usb_device.mojom.h"
++#include "services/device/public/mojom/usb_enumeration_options.mojom.h"
+ #endif
+ 
+ namespace {
+diff --git a/shell/browser/usb/electron_usb_delegate.h b/shell/browser/usb/electron_usb_delegate.h
+index 673fc34677..a7c381e7dc 100644
+--- a/shell/browser/usb/electron_usb_delegate.h
++++ b/shell/browser/usb/electron_usb_delegate.h
+@@ -14,11 +14,16 @@
+ #include "base/memory/weak_ptr.h"
+ #include "content/public/browser/usb_chooser.h"
+ #include "content/public/browser/usb_delegate.h"
++#include "electron/buildflags/buildflags.h"
++#include "url/origin.h"
++#include "services/device/public/mojom/usb_device.mojom.h"
++
++#if BUILDFLAG(ENABLE_ELECTRON_EXTENSIONS)
+ #include "services/device/public/mojom/usb_device.mojom-forward.h"
+ #include "services/device/public/mojom/usb_enumeration_options.mojom-forward.h"
+ #include "services/device/public/mojom/usb_manager.mojom-forward.h"
+ #include "third_party/blink/public/mojom/usb/web_usb_service.mojom.h"
+-#include "url/origin.h"
++#endif
+ 
+ namespace content {
+ class BrowserContext;
+
+# ===== PATCH FROM: /home/kishmakov/build/bd/src =====
+
+diff --git a/extensions/browser/extension_navigation_ui_data.cc b/extensions/browser/extension_navigation_ui_data.cc
+index a9cec0852a789..464ab4bebf52b 100644
+--- a/extensions/browser/extension_navigation_ui_data.cc
++++ b/extensions/browser/extension_navigation_ui_data.cc
+@@ -10,7 +10,7 @@
+ #include "content/public/browser/render_process_host.h"
+ #include "content/public/browser/web_contents.h"
+ 
+-#if BUILDFLAG(ENABLE_GUEST_VIEW)
++#if 0
+ #include "content/public/common/content_features.h"
+ #include "extensions/browser/guest_view/web_view/web_view_guest.h"
+ #endif
+@@ -28,7 +28,7 @@ content::GlobalRenderFrameHostId GetFrameRoutingId(
+   return host->GetGlobalId();
+ }
+ 
+-#if BUILDFLAG(ENABLE_GUEST_VIEW)
++#if 0
+ std::optional<ExtensionNavigationUIData::WebViewData> GetWebViewData(
+     WebViewGuest* web_view) {
+   if (!web_view) {
+@@ -44,7 +44,7 @@ std::optional<ExtensionNavigationUIData::WebViewData> GetWebViewData(
+ 
+ std::optional<ExtensionNavigationUIData::WebViewData> GetWebViewData(
+     content::NavigationHandle* navigation_handle) {
+-#if BUILDFLAG(ENABLE_GUEST_VIEW)
++#if 0
+   return GetWebViewData(WebViewGuest::FromNavigationHandle(navigation_handle));
+ #else
+   return {};
+@@ -53,7 +53,7 @@ std::optional<ExtensionNavigationUIData::WebViewData> GetWebViewData(
+ 
+ std::optional<ExtensionNavigationUIData::WebViewData> GetWebViewData(
+     content::RenderFrameHost* frame_host) {
+-#if BUILDFLAG(ENABLE_GUEST_VIEW)
++#if 0
+   return GetWebViewData(WebViewGuest::FromRenderFrameHost(frame_host));
+ #else
+   return {};
+@@ -115,7 +115,7 @@ ExtensionNavigationUIData::CreateForMainFrameNavigation(
+     content::WebContents* web_contents,
+     int tab_id,
+     int window_id) {
+-#if BUILDFLAG(ENABLE_GUEST_VIEW)
++#if 0
+   CHECK(base::FeatureList::IsEnabled(features::kGuestViewMPArch) ||
+         !WebViewGuest::FromWebContents(web_contents));
+ #endif
