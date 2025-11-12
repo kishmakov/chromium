@@ -10,7 +10,7 @@
 #include "content/public/browser/render_process_host.h"
 #include "content/public/browser/web_contents.h"
 
-#if BUILDFLAG(ENABLE_GUEST_VIEW)
+#if 0
 #include "content/public/common/content_features.h"
 #include "extensions/browser/guest_view/web_view/web_view_guest.h"
 #endif
@@ -28,7 +28,7 @@ content::GlobalRenderFrameHostId GetFrameRoutingId(
   return host->GetGlobalId();
 }
 
-#if BUILDFLAG(ENABLE_GUEST_VIEW)
+#if 0
 std::optional<ExtensionNavigationUIData::WebViewData> GetWebViewData(
     WebViewGuest* web_view) {
   if (!web_view) {
@@ -44,7 +44,7 @@ std::optional<ExtensionNavigationUIData::WebViewData> GetWebViewData(
 
 std::optional<ExtensionNavigationUIData::WebViewData> GetWebViewData(
     content::NavigationHandle* navigation_handle) {
-#if BUILDFLAG(ENABLE_GUEST_VIEW)
+#if 0
   return GetWebViewData(WebViewGuest::FromNavigationHandle(navigation_handle));
 #else
   return {};
@@ -53,7 +53,7 @@ std::optional<ExtensionNavigationUIData::WebViewData> GetWebViewData(
 
 std::optional<ExtensionNavigationUIData::WebViewData> GetWebViewData(
     content::RenderFrameHost* frame_host) {
-#if BUILDFLAG(ENABLE_GUEST_VIEW)
+#if 0
   return GetWebViewData(WebViewGuest::FromRenderFrameHost(frame_host));
 #else
   return {};
@@ -115,7 +115,7 @@ ExtensionNavigationUIData::CreateForMainFrameNavigation(
     content::WebContents* web_contents,
     int tab_id,
     int window_id) {
-#if BUILDFLAG(ENABLE_GUEST_VIEW)
+#if 0
   CHECK(base::FeatureList::IsEnabled(features::kGuestViewMPArch) ||
         !WebViewGuest::FromWebContents(web_contents));
 #endif

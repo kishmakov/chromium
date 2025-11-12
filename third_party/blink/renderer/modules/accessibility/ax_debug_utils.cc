@@ -112,6 +112,7 @@ void CheckTreeConsistency(
                          ui::AXTreeUpdate*,
                          ui::AXTreeData*,
                          ui::AXNodeData>* plugin_serializer) {
+#if DCHECK_IS_ON()
   // If all serializations are complete, check that the number of included nodes
   // being serialized is the same as the number of included nodes according to
   // the AXObjectCache.
@@ -169,6 +170,7 @@ void CheckTreeConsistency(
     }
     DCHECK(false) << msg.str();
   }
+#endif
 
 #if EXPENSIVE_DCHECKS_ARE_ON()
   constexpr size_t kMaxNodesForDeepSlowConsistencyCheck = 100;

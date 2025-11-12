@@ -25,3 +25,6 @@
 - `communication.js` contains functions which send request to another side over port
 - `serialization.js` is for object serialization before transmission
 - `extension.js` is the main file, with the rest of the logic
+
+# Build Instructions
+ - I build this project with `ninja -C out/Testing electron` command

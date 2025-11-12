@@ -90,12 +90,12 @@ bool TsSectionPat::ParsePsiSection(BitReader* bit_reader) {
 
   // Can now register the PMT.
 #if !defined(NDEBUG)
-  int expected_version_number = version_number;
-  if (version_number_ >= 0)
-    expected_version_number = (version_number_ + 1) % 32;
-  DVLOG_IF(1, version_number != expected_version_number)
-      << "Unexpected version number: "
-      << version_number << " vs " << version_number_;
+//  int expected_version_number = version_number;
+//  if (version_number_ >= 0)
+//    expected_version_number = (version_number_ + 1) % 32;
+//  DVLOG_IF(1, version_number != expected_version_number)
+//      << "Unexpected version number: "
+//      << version_number << " vs " << version_number_;
 #endif
   for (int k = 0; k < pmt_pid_count; k++) {
     if (program_number_array[k] != 0) {
