@@ -28,3 +28,6 @@
 
 # Build Instructions
  - I build this project with `ninja -C out/Testing electron` command
+
+# Logs:
+- full logs are located in `/home/kishmakov/.vscode-oss-dev/logs`, named log_*
