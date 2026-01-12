@@ -45,7 +45,6 @@
 /devserver
 /directxsdk
 /edk2
-/electron_node
 /elfutils/src
 /engflow-reclient-configs/
 /espresso/lib/

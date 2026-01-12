@@ -4,8 +4,8 @@
 - in order to achieve this, v8 JS engine and electron infrastructural JS code is patched
 
 # V8 Patch Description
-- changed logic is located mostly in `/home/kishmakov/build/bl/src/v8/src/inspector/v8-debugger.cc`
-  and `/home/kishmakov/build/bl/src/v8/src/builtins/builtins-intl.cc`
+- changed logic is located mostly in `/media/kishmakov/M2/vs/bn/src/v8/src/inspector/v8-debugger.cc`
+  and `/media/kishmakov/M2/vs/bn/src/v8/src/builtins/builtins-intl.cc`
 - there are new JS builtins command introduced in `builtins-intl.cc` file
 - commands `WaitCall` and `WaitType` are used for pausing extension worker thread when it
   needs to get information from extension host thread
@@ -20,7 +20,7 @@
   main extension host thread
 
 # Electron Patch Description
-- JS modification located mostly `/home/kishmakov/build/bl/src/third_party/electron_node/lib/internal/worker`
+- JS modification located mostly `/media/kishmakov/M2/vs/bn/src/third_party/electron_node/lib/internal/worker`
 - `context.js` is for context of execution of current JS
 - `communication.js` contains functions which send request to another side over port
 - `serialization.js` is for object serialization before transmission
